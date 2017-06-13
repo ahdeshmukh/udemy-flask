@@ -20,8 +20,10 @@ def hello_name(userxyz):
 
 @app.route('/post-json', methods=["POST"])
 def post_json():
-    content = request.json
-    print(content['mytext'])
+    json_dict = request.get_json()
+    input_text = json_dict['input_text']
+    data = {'output_text': input_text + ' came back from server'}
+    return jsonify(data)
 
 if __name__ == "__main__":
     app.run(debug=True)
