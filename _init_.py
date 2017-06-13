@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request, jsonify
 
 app = Flask(__name__)
 
@@ -16,6 +16,12 @@ def about():
 @app.route('/user/<userxyz>')
 def hello_name(userxyz):
     return render_template('user.html', nameabc=userxyz)
+
+
+@app.route('/post-json', methods=["POST"])
+def post_json():
+    content = request.json
+    print(content['mytext'])
 
 if __name__ == "__main__":
     app.run(debug=True)
