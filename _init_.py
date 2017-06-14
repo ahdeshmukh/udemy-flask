@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, jsonify
+from datetime import datetime
 
 app = Flask(__name__)
 
@@ -22,7 +23,7 @@ def hello_name(userxyz):
 def post_json():
     json_dict = request.get_json()
     input_text = json_dict['input_text']
-    data = {'output_text': input_text + ' came back from server'}
+    data = {'output_text': input_text + ' came back from server at ' + datetime.now()}
     return jsonify(data)
 
 if __name__ == "__main__":
