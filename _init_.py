@@ -14,9 +14,15 @@ def about():
     return render_template('about.html')
 
 
-@app.route('/user/<userxyz>')
-def hello_name(userxyz):
-    return render_template('user.html', nameabc=userxyz)
+@app.route('/show-users')
+def show_users():
+    users = [
+        {"firstName": "Roy", "lastName": "Swanson"},
+        {"firstName": "Heather", "lastName": "Lee"},
+        {"firstName": "Curtis", "lastName": "Wallace"},
+        {"firstName": "Jessica", "lastName": "Lopez"},
+    ]
+    return render_template('users.html', users=users)
 
 
 @app.route('/post-json', methods=["POST"])
