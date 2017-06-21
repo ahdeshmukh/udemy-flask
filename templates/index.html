@@ -11,7 +11,7 @@
 	  		{{text | safe}}
 	  	</div>
 		<div class="form">
-			<form>
+			<form action="{{url_for('success')}}" method="POST">
 				<input title="Your email address will be safe with us." placeholder="Enter your email address" type="email" name="email_name" required> <br>
 				<input title="Your email address will be safe with us." placeholder="Enter your height in cm" type="number" min="50", max="300", step="0." name="height_name" required> <br>
 				<button class="go-button" type="submit"> Submit </button>

@@ -10,6 +10,11 @@ def index():
     return render_template("index.html")
 
 
+@app.route('/success', methods=["POST"])
+def success():
+    return render_template("success.html")
+
+
 @app.route('/post-json', methods=["POST"])
 def post_json():
     json_dict = request.get_json()
