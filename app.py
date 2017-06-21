@@ -7,7 +7,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    return "Index page"
+    return render_template("index.html")
 
 
 @app.route('/post-json', methods=["POST"])
