@@ -23,9 +23,25 @@ class User(db.Model):
 def index():
     return render_template("login.html")
 
+
 @app.route('/register')
 def register():
     return render_template("register.html")
+
+
+@app.route('/register-success', methods=["POST"])
+def register_success():
+    if request.method == 'POST':
+        email = request.form['email']
+        first_name = request.form['firstName']
+        last_name = request.form['lastName']
+        password = request.form['password']
+        confirm_password = request.form['confirmPassword']
+        recaptcha = request.form['g-recaptcha-response']
+        print(first_name)
+        print(email)
+        print(recaptcha)
+        return "Registered successfully"
 
 
 @app.route('/success', methods=["POST"])

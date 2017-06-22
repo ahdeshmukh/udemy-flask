@@ -2,7 +2,7 @@
 {% block body %}
 <div class="container">
     <div class="wrapper">
-        <form class="form-register">
+        <form action="{{url_for('register_success')}}" method="POST" class="form-register" name="register-form">
             <h2 class="form-register-heading">Register</h2>
             <div class="form-group">
                 <input type="text" class="form-control" name="firstName" placeholder="Firstname" required="" autofocus="" />
@@ -20,6 +20,7 @@
                 <input type="password" class="form-control" name="confirmPassword" placeholder="Confirm Password" required=""/>
             </div>
             <div class="g-recaptcha form-group" data-sitekey="6LfKcCYUAAAAAMRriNB4PtJ7-OCNqe2uzVEJERkq"></div>
+
             <div class="form-group">
                 <button class="btn btn-lg btn-primary btn-block" type="submit">Register</button>
             </div>
