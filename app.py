@@ -1,18 +1,46 @@
 from flask import Flask, render_template, request, jsonify
 from datetime import datetime
-import psycopg2, psycopg2.extras, sys
+from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://amit:password@localhost/flask_db'
+app.config['GOOGLE_RECAPTCHA_SECRET'] = '6LfKcCYUAAAAAJXHWL48hMFZxTcD4Ruv3ANi8Rzb'
+
+db = SQLAlchemy(app)
+
+class User(db.Model):
+    __tablename__ = "users"
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(120), unique=True)
+    height = db.Column(db.Integer)
+
+    def __init__(self, email, height):
+        self.email = email
+        self.height = height
 
 
 @app.route('/')
 def index():
-    return render_template("index.html")
+    return render_template("login.html")
+
+@app.route('/register')
+def register():
+    return render_template("register.html")
 
 
 @app.route('/success', methods=["POST"])
 def success():
-    return render_template("success.html")
+    if request.method == 'POST':
+        email = request.form['email_name']
+        height = request.form['height_name']
+        # Check that email does not already exist (not a great query, but works)
+        if not db.session.query(User).filter(User.email == email).count():
+            user = User(email, height)
+            db.session.add(user)
+            db.session.commit()
+            return render_template("success.html")
+
+        return render_template("index.html", message="Email "+ email + " already exists")
 
 
 @app.route('/post-json', methods=["POST"])
