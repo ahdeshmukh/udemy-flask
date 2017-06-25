@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, jsonify
 from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import text
 import recaptcha2
 from passlib.apps import custom_app_context as pwd_context #https://bitbucket.org/ecollins/passlib/wiki/Home
 
@@ -38,7 +39,7 @@ def register():
 @app.route('/register-success', methods=["POST"])
 def register_success():
     if request.method == 'POST':
-        email = request.form['email']
+        email = request.form['email'].strip()
         first_name = request.form['firstName'].strip()
         last_name = request.form['lastName'].strip()
         password = request.form['password'].strip()
@@ -73,6 +74,22 @@ def register_success():
             db.session.add(user)
             db.session.commit()
         return "Registered successfully"
+
+
+@app.route('/login-success', methods=["POST"])
+def login_success():
+    if request.method == 'POST':
+        email = request.form['email']
+        password = request.form['password']
+        sql = text('select * from flask_user where email = :email')
+        result = db.engine.execute(sql, email=email)
+        auth = False
+        for row in result:
+            auth = pwd_context.verify(password, row['password'])
+
+        if auth == True:
+            return "Logged in successfully"
+    return "Wrong email or password"
 
 
 @app.route('/success', methods=["POST"])

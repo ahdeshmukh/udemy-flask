@@ -2,7 +2,7 @@
 {% block body %}
 <div class="container">
     <div class="wrapper">
-        <form class="form-signin">
+        <form action="{{url_for('login_success')}}" method="POST" class="form-signin">
             <h2 class="form-signin-heading">Login</h2>
             <div class="form-group">
                 <input type="text" class="form-control" name="email" placeholder="Email Address" required="" autofocus="" />
