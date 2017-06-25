@@ -1,6 +1,8 @@
 from flask import Flask, render_template, request, jsonify
 from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
+import recaptcha2
+from passlib.apps import custom_app_context as pwd_context #https://bitbucket.org/ecollins/passlib/wiki/Home
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://amit:password@localhost/flask_db'
@@ -9,14 +11,18 @@ app.config['GOOGLE_RECAPTCHA_SECRET'] = '6LfKcCYUAAAAAJXHWL48hMFZxTcD4Ruv3ANi8Rz
 db = SQLAlchemy(app)
 
 class User(db.Model):
-    __tablename__ = "users"
+    __tablename__ = "flask_user"
     id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(120), unique=True)
-    height = db.Column(db.Integer)
+    email = db.Column(db.String(100), unique=True)
+    first_name = db.Column(db.String(50))
+    last_name = db.Column(db.String(50))
+    password = db.Column(db.String(255))
 
-    def __init__(self, email, height):
+    def __init__(self, email, first_name, last_name, password):
         self.email = email
-        self.height = height
+        self.first_name = first_name
+        self.last_name = last_name
+        self.password = password
 
 
 @app.route('/')
@@ -33,14 +39,39 @@ def register():
 def register_success():
     if request.method == 'POST':
         email = request.form['email']
-        first_name = request.form['firstName']
-        last_name = request.form['lastName']
-        password = request.form['password']
-        confirm_password = request.form['confirmPassword']
+        first_name = request.form['firstName'].strip()
+        last_name = request.form['lastName'].strip()
+        password = request.form['password'].strip()
+        confirm_password = request.form['confirmPassword'].strip()
         recaptcha = request.form['g-recaptcha-response']
-        print(first_name)
-        print(email)
-        print(recaptcha)
+
+        if len(first_name) == 0:
+            print('First name cannot be empty')
+        if len(last_name) == 0:
+            print('Last name cannot be empty')
+        if len(email) == 0:
+            print('Email cannot be empty')
+        if len(password) == 0:
+            print('Password cannot be empty')
+        if len(confirm_password) == 0:
+            print('Confirm password cannot be empty')
+        if len(recaptcha) == 0:
+            print('Recaptcha cannot be empty')
+        if password != confirm_password:
+            print('Password and Confirm password should match')
+
+        # validating user recaptcha input
+        resp = recaptcha2.verify('6LfKcCYUAAAAAJXHWL48hMFZxTcD4Ruv3ANi8Rzb', recaptcha)
+        if resp is None or resp['success'] is None or resp['success'] is False:
+            """Todo: show error saying recaptcha cannot be verified"""
+            pass
+
+        password_hash = pwd_context.hash(password)
+        print(password_hash)
+        if not db.session.query(User).filter(User.email == email).count():
+            user = User(email, first_name, last_name, password_hash)
+            db.session.add(user)
+            db.session.commit()
         return "Registered successfully"
 
 
