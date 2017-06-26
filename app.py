@@ -81,14 +81,20 @@ def login_success():
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
-        sql = text('select * from flask_user where email = :email')
+        sql = text('select id, first_name, last_name, email, password from flask_user where email = :email')
         result = db.engine.execute(sql, email=email)
         auth = False
+        first_name = ''
+        last_name = ''
         for row in result:
             auth = pwd_context.verify(password, row['password'])
+            first_name = row['first_name']
+            last_name = row['last_name']
 
-        if auth == True:
-            return "Logged in successfully"
+        if auth:
+            welcome = 'Welcome ' + first_name + ' ' + last_name
+            return welcome
+
     return "Wrong email or password"
 
 
