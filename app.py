@@ -63,6 +63,8 @@ def register_success():
             print('Recaptcha cannot be empty')
         if password != confirm_password:
             print('Password and Confirm password should match')
+        if len(gender) == 0:
+            print('Must select a gender')
 
         # validating user recaptcha input
         resp = recaptcha2.verify(app.config['GOOGLE_RECAPTCHA_SECRET'], recaptcha)
@@ -78,7 +80,7 @@ def register_success():
         return "Registered successfully"
 
 
-@app.route('/login-success', methods=["POST"])
+@app.route('/login', methods=["POST"])
 def login_success():
     if request.method == 'POST':
         email = request.form['email']
@@ -97,7 +99,7 @@ def login_success():
             user = {'first_name':first_name, 'last_name':last_name}
             return render_template("profile.html", user=user)
 
-    return "Wrong email or password"
+    return render_template("login.html", invalidCredentials=True)
 
 
 @app.route('/success', methods=["POST"])

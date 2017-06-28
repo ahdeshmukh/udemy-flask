@@ -4,6 +4,9 @@
     <div class="wrapper">
         <form action="{{url_for('login_success')}}" method="POST" class="form-signin">
             <h2 class="form-signin-heading">Login</h2>
+            {% if invalidCredentials %}
+                <div class="text-danger" style="margin-bottom:10px;">Invalid email or password</div>
+            {% endif %}
             <div class="form-group">
                 <input type="text" class="form-control" name="email" placeholder="Email Address" required="" autofocus="" />
             </div>
