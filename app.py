@@ -6,8 +6,8 @@ import recaptcha2
 from passlib.apps import custom_app_context as pwd_context #https://bitbucket.org/ecollins/passlib/wiki/Home
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://amit:password@localhost/flask_db'
-app.config['GOOGLE_RECAPTCHA_SECRET'] = '6LfKcCYUAAAAAJXHWL48hMFZxTcD4Ruv3ANi8Rzb'
+
+app.config.from_pyfile('config.py')
 
 db = SQLAlchemy(app)
 
@@ -18,12 +18,14 @@ class User(db.Model):
     first_name = db.Column(db.String(50))
     last_name = db.Column(db.String(50))
     password = db.Column(db.String(255))
+    gender = db.Column(db.String(1))
 
-    def __init__(self, email, first_name, last_name, password):
+    def __init__(self, email, first_name, last_name, password, gender):
         self.email = email
         self.first_name = first_name
         self.last_name = last_name
         self.password = password
+        self.gender = gender
 
 
 @app.route('/')
@@ -45,6 +47,7 @@ def register_success():
         password = request.form['password'].strip()
         confirm_password = request.form['confirmPassword'].strip()
         recaptcha = request.form['g-recaptcha-response']
+        gender = request.form['gender']
 
         if len(first_name) == 0:
             print('First name cannot be empty')
@@ -62,14 +65,14 @@ def register_success():
             print('Password and Confirm password should match')
 
         # validating user recaptcha input
-        resp = recaptcha2.verify('6LfKcCYUAAAAAJXHWL48hMFZxTcD4Ruv3ANi8Rzb', recaptcha)
+        resp = recaptcha2.verify(app.config['GOOGLE_RECAPTCHA_SECRET'], recaptcha)
         if resp is None or resp['success'] is None or resp['success'] is False:
-            """Todo: show error saying recaptcha cannot be verified"""
+            # Todo: show error saying recaptcha cannot be verified"""
             pass
 
         password_hash = pwd_context.hash(password)
         if not db.session.query(User).filter(User.email == email).count():
-            user = User(email, first_name, last_name, password_hash)
+            user = User(email, first_name, last_name, password_hash, gender)
             db.session.add(user)
             db.session.commit()
         return "Registered successfully"

@@ -1,0 +1,3 @@
+DEBUG = True
+SQLALCHEMY_DATABASE_URI = 'postgresql://amit:password@localhost/flask_db'
+GOOGLE_RECAPTCHA_SECRET = '6LfKcCYUAAAAAJXHWL48hMFZxTcD4Ruv3ANi8Rzb'
