@@ -68,7 +68,6 @@ def register_success():
             pass
 
         password_hash = pwd_context.hash(password)
-        print(password_hash)
         if not db.session.query(User).filter(User.email == email).count():
             user = User(email, first_name, last_name, password_hash)
             db.session.add(user)
@@ -92,8 +91,8 @@ def login_success():
             last_name = row['last_name']
 
         if auth:
-            welcome = 'Welcome ' + first_name + ' ' + last_name
-            return welcome
+            user = {'first_name':first_name, 'last_name':last_name}
+            return render_template("profile.html", user=user)
 
     return "Wrong email or password"
 
