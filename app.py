@@ -40,7 +40,7 @@ def register():
 
 @app.route('/register-success', methods=["POST"])
 def register_success():
-    errorMessages = []
+    error_messages = []
     if request.method == 'POST':
         email = request.form['email'].strip()
         first_name = request.form['firstName'].strip()
@@ -51,31 +51,31 @@ def register_success():
         gender = request.form['gender']
 
         if len(first_name) == 0:
-            errorMessages.append('First name cannot be empty')
+            error_messages.append('First name cannot be empty')
             #print('First name cannot be empty')
         if len(last_name) == 0:
-            errorMessages.append('Last name cannot be empty')
+            error_messages.append('Last name cannot be empty')
         if len(email) == 0:
-            errorMessages.append('Email cannot be empty')
+            error_messages.append('Email cannot be empty')
         if len(password) == 0:
-            errorMessages.append('Password cannot be empty')
+            error_messages.append('Password cannot be empty')
         if len(confirm_password) == 0:
-            errorMessages.append('Confirm password cannot be empty')
+            error_messages.append('Confirm password cannot be empty')
         if len(recaptcha) == 0:
-            errorMessages.append('Recaptcha cannot be empty')
+            error_messages.append('Recaptcha cannot be empty')
         if password != confirm_password:
-            errorMessages.append('Password and Confirm password should match')
+            error_messages.append('Password and Confirm password should match')
         if len(gender) == 0:
-            errorMessages.append('Must select a gender')
+            error_messages.append('Must select a gender')
 
         # validating user recaptcha input
-        resp = recaptcha2.verify(app.config['GOOGLE_RECAPTCHA_SECRET'], recaptcha)
-        if resp is None or resp['success'] is None or resp['success'] is False:
+        recaptcha_validation_response = recaptcha2.verify(app.config['GOOGLE_RECAPTCHA_SECRET'], recaptcha)
+        if recaptcha_validation_response is None or recaptcha_validation_response['success'] is None or recaptcha_validation_response['success'] is False:
             # Todo: show error saying recaptcha cannot be verified"""
-            errorMessages.append('Recaptcha cannot be verified')
+            error_messages.append('Recaptcha cannot be verified')
 
-        if errorMessages:
-            return render_template("register.html", errorMessages=errorMessages)
+        if error_messages:
+            return render_template("register.html", errorMessages=error_messages)
 
         password_hash = pwd_context.hash(password)
         if not db.session.query(User).filter(User.email == email).count():
