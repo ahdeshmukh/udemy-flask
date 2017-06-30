@@ -40,6 +40,7 @@ def register():
 
 @app.route('/register-success', methods=["POST"])
 def register_success():
+    errorMessages = []
     if request.method == 'POST':
         email = request.form['email'].strip()
         first_name = request.form['firstName'].strip()
@@ -50,27 +51,31 @@ def register_success():
         gender = request.form['gender']
 
         if len(first_name) == 0:
-            print('First name cannot be empty')
+            errorMessages.append('First name cannot be empty')
+            #print('First name cannot be empty')
         if len(last_name) == 0:
-            print('Last name cannot be empty')
+            errorMessages.append('Last name cannot be empty')
         if len(email) == 0:
-            print('Email cannot be empty')
+            errorMessages.append('Email cannot be empty')
         if len(password) == 0:
-            print('Password cannot be empty')
+            errorMessages.append('Password cannot be empty')
         if len(confirm_password) == 0:
-            print('Confirm password cannot be empty')
+            errorMessages.append('Confirm password cannot be empty')
         if len(recaptcha) == 0:
-            print('Recaptcha cannot be empty')
+            errorMessages.append('Recaptcha cannot be empty')
         if password != confirm_password:
-            print('Password and Confirm password should match')
+            errorMessages.append('Password and Confirm password should match')
         if len(gender) == 0:
-            print('Must select a gender')
+            errorMessages.append('Must select a gender')
 
         # validating user recaptcha input
         resp = recaptcha2.verify(app.config['GOOGLE_RECAPTCHA_SECRET'], recaptcha)
         if resp is None or resp['success'] is None or resp['success'] is False:
             # Todo: show error saying recaptcha cannot be verified"""
-            pass
+            errorMessages.append('Recaptcha cannot be verified')
+
+        if errorMessages:
+            return render_template("register.html", errorMessages=errorMessages)
 
         password_hash = pwd_context.hash(password)
         if not db.session.query(User).filter(User.email == email).count():
