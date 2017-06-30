@@ -107,21 +107,6 @@ def login_success():
     return render_template("login.html", invalidCredentials=True)
 
 
-@app.route('/success', methods=["POST"])
-def success():
-    if request.method == 'POST':
-        email = request.form['email_name']
-        height = request.form['height_name']
-        # Check that email does not already exist (not a great query, but works)
-        if not db.session.query(User).filter(User.email == email).count():
-            user = User(email, height)
-            db.session.add(user)
-            db.session.commit()
-            return render_template("success.html")
-
-        return render_template("index.html", message="Email "+ email + " already exists")
-
-
 @app.route('/post-json', methods=["POST"])
 def post_json():
     json_dict = request.get_json()
