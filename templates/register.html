@@ -5,7 +5,7 @@
         <form action="{{url_for('register_success')}}" method="POST" class="form-register" name="register-form">
             <h2 class="form-register-heading">Register</h2>
             {% if errorMessages %}
-                <ul class="text-danger">
+                <ul class="text-danger registration-errors">
                     {% for errorMessage in errorMessages %}
                         <li>{{errorMessage}}</li>
                     {% endfor %}

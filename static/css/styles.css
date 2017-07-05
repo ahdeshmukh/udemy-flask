@@ -42,3 +42,9 @@ body {
         border-top-right-radius: 0;
 	}
 }
+
+ul.registration-errors {
+    list-style-type: none;
+    padding: 0;
+    margin: 10px 0;
+}

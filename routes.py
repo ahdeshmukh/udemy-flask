@@ -53,6 +53,10 @@ def register_success():
             # Todo: show error saying recaptcha cannot be verified"""
             error_messages.append('Recaptcha cannot be verified')
 
+        # check if email exists
+        if db.session.query(User).filter(User.email == email).count():
+            error_messages.append('Cannot register. Email already exists')
+
         if error_messages:
             return render_template("register.html", errorMessages=error_messages)
 
