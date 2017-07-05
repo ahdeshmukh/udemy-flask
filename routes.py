@@ -5,7 +5,7 @@ import recaptcha2
 from passlib.apps import custom_app_context as pwd_context #https://bitbucket.org/ecollins/passlib/wiki/Home
 
 from app import app, db
-from models import User
+from models.user import User
 
 
 @app.route('/')
