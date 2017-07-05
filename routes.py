@@ -61,10 +61,9 @@ def register_success():
             return render_template("register.html", errorMessages=error_messages)
 
         password_hash = pwd_context.hash(password)
-        if not db.session.query(User).filter(User.email == email).count():
-            user = User(email, first_name, last_name, password_hash, gender)
-            db.session.add(user)
-            db.session.commit()
+        user = User(email, first_name, last_name, password_hash, gender)
+        db.session.add(user)
+        db.session.commit()
         return "Registered successfully"
 
 
