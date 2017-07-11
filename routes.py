@@ -21,16 +21,7 @@ def register():
 
 @app.route('/register-success', methods=["POST"])
 def register_success():
-    # error_messages = []
     if request.method == 'POST':
-        # email = request.form['email'].strip()
-        # first_name = request.form['firstName'].strip()
-        # last_name = request.form['lastName'].strip()
-        # password = request.form['password'].strip()
-        # confirm_password = request.form['confirmPassword'].strip()
-        # recaptcha = request.form['g-recaptcha-response']
-        # gender = request.form['gender']
-
         registration_data = {
             'email': request.form['email'],
             'first_name': request.form['firstName'],
@@ -41,47 +32,12 @@ def register_success():
             'gender': request.form['gender']
         }
 
-        # 'recaptcha': request.form['recaptcha'],
-
         user_service = UserService()
         user_registration_result = user_service.register(registration_data)
         if user_registration_result['success']:
             return "Registered successfully"
         else:
             return "Error in registering the user"
-
-        # if len(first_name) == 0:
-        #     error_messages.append('First name cannot be empty')
-        # if len(last_name) == 0:
-        #     error_messages.append('Last name cannot be empty')
-        # if len(email) == 0:
-        #     error_messages.append('Email cannot be empty')
-        # if len(password) == 0:
-        #     error_messages.append('Password cannot be empty')
-        # if len(confirm_password) == 0:
-        #     error_messages.append('Confirm password cannot be empty')
-        # if len(recaptcha) == 0:
-        #     error_messages.append('Recaptcha cannot be empty')
-        # if password != confirm_password:
-        #     error_messages.append('Password and Confirm password should match')
-        # if len(gender) == 0:
-        #     error_messages.append('Must select a gender')
-        #
-        # # validating user recaptcha input
-        # recaptcha_validation_response = recaptcha2.verify(app.config['GOOGLE_RECAPTCHA_SECRET'], recaptcha)
-        # if recaptcha_validation_response is None or recaptcha_validation_response['success'] is None or recaptcha_validation_response['success'] is False:
-        #     # Todo: show error saying recaptcha cannot be verified
-        #     error_messages.append('Recaptcha cannot be verified')
-        #
-        # if error_messages:
-        #     return render_template("register.html", errorMessages=error_messages)
-        #
-        # password_hash = pwd_context.hash(password)
-        # if not db.session.query(User).filter(User.email == email).count():
-        #     user = User(email, first_name, last_name, password_hash, gender)
-        #     db.session.add(user)
-        #     db.session.commit()
-        # return "Registered successfully"
 
 
 @app.route('/login', methods=["POST"])
