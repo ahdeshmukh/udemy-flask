@@ -1,12 +1,13 @@
 from app import db
-from services.flasklogging import FlaskLogging
+from services.flaskerror import FlaskError
 
-class FlaskSQLAlchemy:
+
+class FlaskSQLAlchemy():
 
     def __init__(self):
         self.db = db.session
         self.filter_val = ''
-        self.flask_logging = FlaskLogging()
+        self.flask_error = FlaskError()
 
     def add(self, obj):
         try:
@@ -57,9 +58,5 @@ class FlaskSQLAlchemy:
         except Exception as e:
             return self.error_message(e)
 
-    @staticmethod
     def error_message(self, error_message=None):
-        if not error_message:
-            error_message = 'Something went wrong'
-            self.flask_logging.log_error(error_message)
-        return {'success': False, 'error_message': error_message}
+        return self.flask_error.error_message(error_message)
