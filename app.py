@@ -11,14 +11,12 @@ app = Flask(__name__)
 
 app.config.from_pyfile('config.py')
 
-
-
 db = SQLAlchemy(app)
 
 from routes import *
 
 if __name__ == "__main__":
-    handler = RotatingFileHandler('log/foo.log', maxBytes=10000, backupCount=1)
+    handler = RotatingFileHandler('foo.log', maxBytes=10000, backupCount=1)
     handler.setLevel(logging.INFO)
     app.logger.addHandler(handler)
     app.run(debug=True)
