@@ -23,28 +23,28 @@ class UserService:
         return self.add_user(user)
 
     def add_user(self, user):
-        error_messages = []
+        errors = []
 
         if len(user['first_name']) == 0:
-            error_messages.append('First name cannot be empty')
+            errors.append('First name cannot be empty')
         if len(user['last_name']) == 0:
-            error_messages.append('Last name cannot be empty')
+            errors.append('Last name cannot be empty')
         if len(user['email']) == 0:
-            error_messages.append('Email cannot be empty')
+            errors.append('Email cannot be empty')
         if len(user['password']) == 0:
-            error_messages.append('Password cannot be empty')
+            errors.append('Password cannot be empty')
         if len(user['confirm_password']) == 0:
-            error_messages.append('Confirm password cannot be empty')
+            errors.append('Confirm password cannot be empty')
 
         if len(user['recaptcha']) == 0:
-            error_messages.append('Recaptcha cannot be empty')
+            errors.append('Recaptcha cannot be empty')
         if user['password'] != user['confirm_password']:
-            error_messages.append('Password and Confirm password should match')
+            errors.append('Password and Confirm password should match')
         if len(user['gender']) == 0:
-            error_messages.append('Must select a gender')
+            errors.append('Must select a gender')
 
-        if error_messages:
-            return {'success': False, 'error_messages': error_messages}
+        if errors:
+            return {'success': False, 'errors': errors}
 
         password_hash = pwd_context.hash(user['password'])
         flasksqlalchemy = FlaskSQLAlchemy()
@@ -53,7 +53,8 @@ class UserService:
             new_user = User(user['email'], user['first_name'], user['last_name'], password_hash, user['gender'])
             return flasksqlalchemy.add(new_user)
         else:
-            return {'success': False, 'error_messages': 'Failed to register. Email already exists.'}
+            errors.append('Failed to register. Email already exists')
+            return {'success': False, 'errors': errors}
 
 
 

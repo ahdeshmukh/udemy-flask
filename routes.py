@@ -14,13 +14,9 @@ def index():
     return render_template("login.html")
 
 
-@app.route('/register')
+@app.route('/register', methods=['GET', 'POST'])
 def register():
-    return render_template("register.html")
-
-
-@app.route('/register-success', methods=["POST"])
-def register_success():
+    registration_errors = None
     if request.method == 'POST':
         registration_data = {
             'email': request.form['email'],
@@ -35,12 +31,37 @@ def register_success():
         user_service = UserService()
         user_registration_result = user_service.register(registration_data)
         if user_registration_result['success']:
-            return "Registered successfully"
+            return render_template('login.html', register_success=True)
         else:
-            return "Error in registering the user"
+            registration_errors = ['Error in registering the user']
+            if user_registration_result['errors']:
+                registration_errors = user_registration_result['errors']
+
+    return render_template('register.html', registration_errors=registration_errors)
 
 
-@app.route('/login', methods=["POST"])
+# @app.route('/register-success', methods=['POST'])
+# def register_success():
+#     if request.method == 'POST':
+#         registration_data = {
+#             'email': request.form['email'],
+#             'first_name': request.form['firstName'],
+#             'last_name': request.form['lastName'],
+#             'password': request.form['password'],
+#             'confirm_password': request.form['confirmPassword'],
+#             'recaptcha': request.form['g-recaptcha-response'],
+#             'gender': request.form['gender']
+#         }
+#
+#         user_service = UserService()
+#         user_registration_result = user_service.register(registration_data)
+#         if user_registration_result['success']:
+#             return "Registered successfully"
+#         else:
+#             return "Error in registering the user"
+
+
+@app.route('/login', methods=['POST'])
 def login_success():
     if request.method == 'POST':
         email = request.form['email']
@@ -56,13 +77,13 @@ def login_success():
             last_name = row['last_name']
 
         if auth:
-            user = {'first_name':first_name, 'last_name':last_name}
+            user = {'first_name': first_name, 'last_name': last_name}
             return render_template("profile.html", user=user)
 
-    return render_template("login.html", invalidCredentials=True)
+    return render_template("login.html", invalid_credentials=True)
 
 
-@app.route('/post-json', methods=["POST"])
+@app.route('/post-json', methods=['POST'])
 def post_json():
     json_dict = request.get_json()
     input_text = json_dict['input_text']

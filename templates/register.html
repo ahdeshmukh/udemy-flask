@@ -2,12 +2,12 @@
 {% block body %}
 <div class="container">
     <div class="wrapper">
-        <form action="{{url_for('register_success')}}" method="POST" class="form-register" name="register-form">
+        <form action="{{url_for('register')}}" method="POST" class="form-register" name="register-form">
             <h2 class="form-register-heading">Register</h2>
-            {% if errorMessages %}
+            {% if registration_errors %}
                 <ul class="text-danger registration-errors">
-                    {% for errorMessage in errorMessages %}
-                        <li>{{errorMessage}}</li>
+                    {% for error in registration_errors %}
+                        <li>{{error}}</li>
                     {% endfor %}
                 </ul>
             {% endif %}
