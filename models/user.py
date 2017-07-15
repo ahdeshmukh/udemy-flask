@@ -8,10 +8,12 @@ class User(db.Model):
     last_name = db.Column(db.String(50))
     password = db.Column(db.String(255))
     gender = db.Column(db.String(1))
+    zipcode = db.Column(db.String(5))
 
-    def __init__(self, email, first_name, last_name, password, gender):
+    def __init__(self, email, first_name, last_name, password, gender, zipcode):
         self.email = email
         self.first_name = first_name
         self.last_name = last_name
         self.password = password
         self.gender = gender
+        self.zipcode = zipcode

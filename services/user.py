@@ -35,13 +35,18 @@ class UserService:
             errors.append('Password cannot be empty')
         if len(user['confirm_password']) == 0:
             errors.append('Confirm password cannot be empty')
-
-        if len(user['recaptcha']) == 0:
-            errors.append('Recaptcha cannot be empty')
         if user['password'] != user['confirm_password']:
             errors.append('Password and Confirm password should match')
+        if len(user['recaptcha']) == 0:
+            errors.append('Recaptcha cannot be empty')
         if len(user['gender']) == 0:
             errors.append('Must select a gender')
+        if len(user['zipcode']) == 0:
+            errors.append('Zipcode cannot be empty')
+        if len(user['zipcode']) != 5:
+            errors.append('Zipcode must be 5 digit long')
+        if not user['zipcode'].isnumeric():
+            errors.append('Zipcode must be a valid 5 digit number')
 
         if errors:
             return {'success': False, 'errors': errors}
@@ -50,7 +55,7 @@ class UserService:
         flasksqlalchemy = FlaskSQLAlchemy()
         count = flasksqlalchemy.count('User', {'val1': User.email, 'val2': user['email'], 'operation': 'eq'})
         if not count:
-            new_user = User(user['email'], user['first_name'], user['last_name'], password_hash, user['gender'])
+            new_user = User(user['email'], user['first_name'], user['last_name'], password_hash, user['gender'], user['zipcode'])
             return flasksqlalchemy.add(new_user)
         else:
             errors.append('Failed to register. Email already exists')

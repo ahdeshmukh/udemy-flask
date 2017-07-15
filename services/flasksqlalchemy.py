@@ -31,13 +31,9 @@ class FlaskSQLAlchemy():
         except Exception as e:
             return self.error_message(e)
 
-    def filter(self, val1=None, val2=None, operation='eq'):
+    def filter(self, model, model_val, actual_val, operation='eq'):
         try:
-            # return self.db.filter(val1 + operation + val2)
-
-            self.filter_val = ''
-            if val1 and val2:
-                self.filter_val = val1 + operation + val2
+            return self.db.query(model).filter(model_val == actual_val)
         except Exception as e:
             return self.error_message(e)
 
