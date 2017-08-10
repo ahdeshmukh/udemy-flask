@@ -52,11 +52,18 @@ class UserService:
             return {'success': False, 'errors': errors}
 
         password_hash = pwd_context.hash(user['password'])
-        flasksqlalchemy = FlaskSQLAlchemy()
-        count = flasksqlalchemy.count('User', {'val1': User.email, 'val2': user['email'], 'operation': 'eq'})
+        flask_sql_alchemy = FlaskSQLAlchemy()
+        count = flask_sql_alchemy.count('User', {'val1': User.email, 'val2': user['email'], 'operation': 'eq'})
         if not count:
-            new_user = User(user['email'], user['first_name'], user['last_name'], password_hash, user['gender'], user['zipcode'])
-            return flasksqlalchemy.add(new_user)
+            new_user = User()
+            new_user.email = user['email']
+            new_user.first_name = user['first_name']
+            new_user.last_name = user['last_name']
+            new_user.password = password_hash
+            new_user.gender = user['gender']
+            new_user.zipcode = user['zipcode']
+
+            return flask_sql_alchemy.add(new_user)
         else:
             errors.append('Failed to register. Email already exists')
             return {'success': False, 'errors': errors}
