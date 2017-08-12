@@ -1,4 +1,4 @@
-from flask import render_template, request, jsonify
+from flask import render_template, request, jsonify, redirect,url_for
 from datetime import datetime
 from sqlalchemy import text
 from passlib.apps import custom_app_context as pwd_context #https://bitbucket.org/ecollins/passlib/wiki/Home
@@ -49,9 +49,19 @@ def login_success():
         login_result = auth_service.login({'email': email, 'password': password})
 
         if login_result['success']:
-            return render_template("profile.html", user=login_result['user'])
+            #return render_template("profile.html", user=login_result['user'])
+            # return redirect(url_for("get_user", user=login_result['user']))
+            return redirect(url_for('.get_user', user_id=login_result['user']['id']))
 
     return render_template("login.html", invalid_credentials=True)
+
+
+@app.route('/user/<user_id>')
+def get_user(user_id):
+    user_service = UserService()
+    user = user_service.get_user(user_id)
+    print(user)
+    return render_template("profile.html", user=user)
 
 
 @app.route('/post-json', methods=['POST'])

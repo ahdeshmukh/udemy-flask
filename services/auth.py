@@ -24,10 +24,10 @@ class AuthService:
             auth = pwd_context.verify(credentials['password'], row['password'])
 
         if auth:
-            user = {'first_name': row['first_name'], 'last_name': row['last_name'], 'email': row['email'],
+            user = {'id': row['id'], 'first_name': row['first_name'], 'last_name': row['last_name'], 'email': row['email'],
                     'zipcode': row['zipcode']}
             return {'success': True, 'user': user}
 
-        login_error.append('Invalid Usernamexxx or password')
+        login_error.append('Invalid Username or password')
         return {'success': False, 'errors': login_error}
 

@@ -4,6 +4,7 @@ from passlib.apps import custom_app_context as pwd_context #https://bitbucket.or
 from app import app, db
 from models.user import User
 from services.flasksqlalchemy import FlaskSQLAlchemy
+from services.flasklogging import FlaskLogging
 
 class UserService:
 
@@ -68,5 +69,46 @@ class UserService:
             errors.append('Failed to register. Email already exists')
             return {'success': False, 'errors': errors}
 
+    def get_user(self, user_id):
+        user = {}
+        flask_logging = FlaskLogging()
+        try:
+            result = User \
+                .query \
+                .with_entities(User.id.label('id'), User.first_name.label('first_name'),
+                               User.last_name.label('last_name'), User.email.label('email'),
+                               User.gender.label('gender'), User.zipcode.label('zipcode')) \
+                .filter(User.id == user_id)
+            try:
+                if not result[0].gender:
+                    image_url = 'https://i.stack.imgur.com/IHLNO.jpg'
+                else:
+                    image_url = 'https://randomuser.me/api/portraits/'
+                    if result[0].gender == 'm':
+                        image_url += 'men/'
+                    else:
+                        image_url += 'women/'
 
+                    # use 50 images, then recycle
+                    image_num = '1' if (user_id % 50 == 0) else str(user_id % 50)
+                    image_url += image_num + '.jpg'
 
+                image_url = 'https://randomuser.me/api/portraits/men/46.jpg'
+
+                user = {
+                    "id": user_id,
+                    "first_name": result[0].first_name,
+                    "last_name": result[0].last_name,
+                    "email": result[0].email,
+                    "gender": result[0].gender,
+                    "zipcode": result[0].zipcode
+                }
+
+                #user['image_123'] = 'https://randomuser.me/api/portraits/men/46.jpg'
+
+            except Exception as e:
+                flask_logging.log_info(str(e))
+        except Exception as e:
+            flask_logging.log_info(str(e))
+
+        return user
