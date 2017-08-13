@@ -1,0 +1,14 @@
+(function(){
+    $(document).ready(function(){
+        $('#profile-user-overview').click(function(e){
+            e.preventDefault();
+            $(this).addClass("active");
+            $("#profile-user-account").removeClass("active");
+        });
+        $('#profile-user-account').click(function(e){
+            e.preventDefault();
+            $(this).addClass("active");
+            $("#profile-user-overview").removeClass("active");
+        });
+    });
+})();
