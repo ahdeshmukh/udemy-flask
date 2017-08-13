@@ -60,7 +60,6 @@ def login_success():
 def get_user(user_id):
     user_service = UserService()
     user = user_service.get_user(user_id)
-    print(user)
     return render_template("profile.html", user=user)
 
 

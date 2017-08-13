@@ -83,6 +83,7 @@ class UserService:
                 if not result[0].gender:
                     image_url = 'https://i.stack.imgur.com/IHLNO.jpg'
                 else:
+                    pass
                     image_url = 'https://randomuser.me/api/portraits/'
                     if result[0].gender == 'm':
                         image_url += 'men/'
@@ -90,21 +91,16 @@ class UserService:
                         image_url += 'women/'
 
                     # use 50 images, then recycle
-                    image_num = '1' if (user_id % 50 == 0) else str(user_id % 50)
-                    image_url += image_num + '.jpg'
+                    image_num = int(user_id) % 50
+                    if image_num == 0:
+                        image_num = 1
 
-                image_url = 'https://randomuser.me/api/portraits/men/46.jpg'
+                    image_url += str(image_num) + '.jpg'
 
-                user = {
-                    "id": user_id,
-                    "first_name": result[0].first_name,
-                    "last_name": result[0].last_name,
-                    "email": result[0].email,
-                    "gender": result[0].gender,
-                    "zipcode": result[0].zipcode
+                user = {"id": user_id, "first_name": result[0].first_name, "last_name": result[0].last_name,
+                        "email": result[0].email, "gender": result[0].gender, "zipcode": result[0].zipcode,
+                        "image": image_url
                 }
-
-                #user['image_123'] = 'https://randomuser.me/api/portraits/men/46.jpg'
 
             except Exception as e:
                 flask_logging.log_info(str(e))
