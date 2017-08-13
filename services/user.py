@@ -63,6 +63,9 @@ class UserService:
             new_user.password = password_hash
             new_user.gender = user['gender']
             new_user.zipcode = user['zipcode']
+            new_user.title = user['title']
+            if user['description']:
+                new_user.description = user['description']
 
             return flask_sql_alchemy.add(new_user)
         else:
@@ -71,40 +74,32 @@ class UserService:
 
     def get_user(self, user_id):
         user = {}
-        flask_logging = FlaskLogging()
         try:
-            result = User \
-                .query \
+            result = User\
+                .query\
                 .with_entities(User.id.label('id'), User.first_name.label('first_name'),
                                User.last_name.label('last_name'), User.email.label('email'),
-                               User.gender.label('gender'), User.zipcode.label('zipcode')) \
+                               User.gender.label('gender'), User.zipcode.label('zipcode'))\
                 .filter(User.id == user_id)
-            try:
-                if not result[0].gender:
-                    image_url = 'https://i.stack.imgur.com/IHLNO.jpg'
+            if not result[0].gender:
+                image_url = 'https://i.stack.imgur.com/IHLNO.jpg'
+            else:
+                image_url = 'https://randomuser.me/api/portraits/'
+                if result[0].gender == 'm':
+                    image_url += 'men/'
                 else:
-                    pass
-                    image_url = 'https://randomuser.me/api/portraits/'
-                    if result[0].gender == 'm':
-                        image_url += 'men/'
-                    else:
-                        image_url += 'women/'
+                    image_url += 'women/'
 
-                    # use 50 images, then recycle
-                    image_num = int(user_id) % 50
-                    if image_num == 0:
-                        image_num = 1
+                # use 50 images, then recycle
+                image_num = int(user_id) % 50
+                if image_num == 0:
+                    image_num = 1
+                image_url += str(image_num) + '.jpg'
 
-                    image_url += str(image_num) + '.jpg'
-
-                user = {"id": user_id, "first_name": result[0].first_name, "last_name": result[0].last_name,
-                        "email": result[0].email, "gender": result[0].gender, "zipcode": result[0].zipcode,
-                        "image": image_url
-                }
-
-            except Exception as e:
-                flask_logging.log_info(str(e))
+            user = {"id": user_id, "first_name": result[0].first_name, "last_name": result[0].last_name,
+                    "email": result[0].email, "gender": result[0].gender, "zipcode": result[0].zipcode,
+                    "image": image_url}
         except Exception as e:
+            flask_logging = FlaskLogging()
             flask_logging.log_info(str(e))
-
         return user
