@@ -1,14 +1,19 @@
 (function(){
     $(document).ready(function(){
-        $('#profile-user-overview').click(function(e){
+        $("#profile-user-my-account").hide();
+        $("#profile-user-overview").click(function(e){
             e.preventDefault();
             $(this).addClass("active");
             $("#profile-user-account").removeClass("active");
+            $("#profile-user-description").show();
+            $("#profile-user-my-account").hide();
         });
-        $('#profile-user-account').click(function(e){
+        $("#profile-user-account").click(function(e){
             e.preventDefault();
             $(this).addClass("active");
             $("#profile-user-overview").removeClass("active");
+            $("#profile-user-my-account").show();
+            $("#profile-user-description").hide();
         });
     });
 })();
