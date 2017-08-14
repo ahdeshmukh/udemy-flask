@@ -1,5 +1,6 @@
 from passlib.apps import custom_app_context as pwd_context #https://bitbucket.org/ecollins/passlib/wiki/Home
 from sqlalchemy import text
+from datetime import datetime
 
 from app import app, db
 
@@ -24,6 +25,8 @@ class AuthService:
             auth = pwd_context.verify(credentials['password'], row['password'])
 
         if auth:
+            update_last_login_sql = text('UPDATE flask_user SET last_login = :last_login WHERE id = :id')
+            db.engine.execute(update_last_login_sql, last_login=str(datetime.now()), id=row['id'])
             user = {'id': row['id'], 'first_name': row['first_name'], 'last_name': row['last_name'], 'email': row['email'],
                     'zipcode': row['zipcode']}
             return {'success': True, 'user': user}
