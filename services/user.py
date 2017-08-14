@@ -106,3 +106,48 @@ class UserService:
             flask_logging = FlaskLogging()
             flask_logging.log_info(str(e))
         return user
+
+    def update_user_account(self, user_data):
+        errors = []
+
+        if len(user_data['first_name']) == 0:
+            errors.append('First name cannot be empty')
+        if len(user_data['last_name']) == 0:
+            errors.append('Last name cannot be empty')
+        if len(user_data['gender']) == 0:
+            errors.append('Must select a gender')
+        if len(user_data['title']) == 0:
+            errors.append('Title cannot be empty')
+        if len(user_data['zipcode']) == 0:
+            errors.append('Zipcode cannot be empty')
+        if len(user_data['zipcode']) != 5:
+            errors.append('Zipcode must be 5 digit long')
+        if not user_data['zipcode'].isnumeric():
+            errors.append('Zipcode must be a valid 5 digit number')
+
+        if errors:
+            return {'success': False, 'errors': errors}
+
+        # user_from_db = self.get_user(user_data['user_id'])
+        #
+        # user = User()
+        # user.id = user_data['user_id']
+        # user.first_name = user_data['first_name']
+        # user.last_name = user_data['last_name']
+        # user.email = user_from_db['email']
+        # user.password = '$6$rounds=656000$S4GS5srTzNh9j.5t$R9q0OsFiiQK3KxDv5kKGN8mTgntmZKMbbBOZE5boubXVB2kSOSy0yGEFMT847NDN0sw/0qu0SqWh1QIq8c9um1'
+        # user.zipcode = user_data['zipcode']
+        # user.title = user_data['title']
+        # user.gender = user_data['gender']
+
+        user = User.query.filter_by(id=user_data['user_id']).first()
+        user.first_name = user_data['first_name']
+        user.last_name = user_data['last_name']
+        user.zipcode = user_data['zipcode']
+        user.title = user_data['title']
+        user.gender = user_data['gender']
+
+        flask_sql_alchemy = FlaskSQLAlchemy()
+        return flask_sql_alchemy.commit()
+
+

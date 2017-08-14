@@ -64,6 +64,22 @@ def get_user(user_id):
     return render_template("profile.html", user=user)
 
 
+@app.route('/update-account', methods=['POST'])
+def update_account():
+    if request.method == 'POST':
+        user_data = {
+            'user_id': request.form['user_id'],
+            'first_name': request.form['firstName'],
+            'last_name': request.form['lastName'],
+            'gender': request.form['gender'],
+            'zipcode': request.form['zipcode'],
+            'title': request.form['title']
+        }
+        user_service = UserService()
+        user = user_service.update_user_account(user_data)
+    return render_template("profile.html", user=user)
+
+
 @app.route('/post-json', methods=['POST'])
 def post_json():
     json_dict = request.get_json()
