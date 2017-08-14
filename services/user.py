@@ -42,6 +42,8 @@ class UserService:
             errors.append('Recaptcha cannot be empty')
         if len(user['gender']) == 0:
             errors.append('Must select a gender')
+        if len(user['title']) == 0:
+            errors.append('Title cannot be empty')
         if len(user['zipcode']) == 0:
             errors.append('Zipcode cannot be empty')
         if len(user['zipcode']) != 5:
@@ -64,7 +66,7 @@ class UserService:
             new_user.gender = user['gender']
             new_user.zipcode = user['zipcode']
             new_user.title = user['title']
-            if user['description']:
+            if 'description' in user:
                 new_user.description = user['description']
 
             return flask_sql_alchemy.add(new_user)
@@ -79,7 +81,8 @@ class UserService:
                 .query\
                 .with_entities(User.id.label('id'), User.first_name.label('first_name'),
                                User.last_name.label('last_name'), User.email.label('email'),
-                               User.gender.label('gender'), User.zipcode.label('zipcode'))\
+                               User.gender.label('gender'), User.zipcode.label('zipcode'),
+                               User.title.label('title'))\
                 .filter(User.id == user_id)
             if not result[0].gender:
                 image_url = 'https://i.stack.imgur.com/IHLNO.jpg'
@@ -98,7 +101,7 @@ class UserService:
 
             user = {"id": user_id, "first_name": result[0].first_name, "last_name": result[0].last_name,
                     "email": result[0].email, "gender": result[0].gender, "zipcode": result[0].zipcode,
-                    "image": image_url}
+                    "title": result[0].title, "image": image_url}
         except Exception as e:
             flask_logging = FlaskLogging()
             flask_logging.log_info(str(e))

@@ -12,9 +12,10 @@ CREATE TABLE flask_user(
 	id serial PRIMARY KEY,
 	first_name VARCHAR(50) NOT NULL,
 	last_name VARCHAR(50) NOT NULL,
- 	email VARCHAR (100) UNIQUE NOT NULL,
+ 	email VARCHAR(50) UNIQUE NOT NULL,
  	password VARCHAR (255) NOT NULL,
 	gender CHAR(1) DEFAULT NULL CHECK (gender IN ('m', 'f')),
+	title VARCHAR(40) NOT NULL,
 	zipcode CHAR(5) NOT NULL,
  	created_on TIMESTAMP NOT NULL DEFAULT NOW(),
  	last_login TIMESTAMP
@@ -35,4 +36,4 @@ CREATE TABLE flask_user_role
 INSERT INTO flask_role (name, description) VALUES ('admin', 'Super admin role');
 INSERT INTO flask_role (name, description) VALUES ('authenticated', 'Default role for all registerd users');
 
-INSERT INTO flask_user (first_name, last_name, email, password, zipcode) VALUES ('Admin', 'Admin', 'admin@example.com', '$6$rounds=656000$S4GS5srTzNh9j.5t$R9q0OsFiiQK3KxDv5kKGN8mTgntmZKMbbBOZE5boubXVB2kSOSy0yGEFMT847NDN0sw/0qu0SqWh1QIq8c9um1', '20190')
+INSERT INTO flask_user (first_name, last_name, email, password, zipcode, title) VALUES ('Admin', 'Admin', 'admin@example.com', '$6$rounds=656000$S4GS5srTzNh9j.5t$R9q0OsFiiQK3KxDv5kKGN8mTgntmZKMbbBOZE5boubXVB2kSOSy0yGEFMT847NDN0sw/0qu0SqWh1QIq8c9um1', '20190', 'Site Admin')

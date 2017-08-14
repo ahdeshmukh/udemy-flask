@@ -10,6 +10,7 @@ class User(db.Model):
     password = db.Column(db.String(255), nullable=False)
     gender = db.Column(db.String(1), nullable=False)
     zipcode = db.Column(db.String(5), nullable=False)
+    title = db.Column(db.String(5), nullable=False)
 
     # def __init__(self, email, first_name, last_name, password, gender, zipcode):
     #     self.email = email

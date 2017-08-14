@@ -25,7 +25,8 @@ def register():
             'confirm_password': request.form['confirmPassword'],
             'recaptcha': request.form['g-recaptcha-response'],
             'gender': request.form['gender'],
-            'zipcode': request.form['zipcode']
+            'zipcode': request.form['zipcode'],
+            'title': request.form['title']
         }
 
         user_service = UserService()
