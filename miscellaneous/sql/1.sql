@@ -17,7 +17,7 @@ CREATE TABLE flask_user(
 	gender CHAR(1) DEFAULT NULL CHECK (gender IN ('m', 'f')),
 	title VARCHAR(40) NOT NULL,
 	zipcode CHAR(5) NOT NULL,
- 	created_on TIMESTAMP NOT NULL DEFAULT NOW(),
+ 	created_time TIMESTAMP NOT NULL DEFAULT NOW(),
  	last_login TIMESTAMP
 );
 
