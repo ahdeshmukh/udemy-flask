@@ -75,10 +75,18 @@
 						<input type="text" class="form-control" id="zipcode" name="zipcode" placeholder="Zip Code" required="" maxlength="5" minlength="5" value="{{user.zipcode}}" />
 					</div>
 					<div class="radio-inline">
-					  <label><input type="radio" name="gender" value="m" required>Male</label>
+						{% if user.gender == 'm' %}
+					  		<label><input type="radio" name="gender" value="m" required checked>Male</label>
+						{% else %}
+							<label><input type="radio" name="gender" value="m" required>Male</label>
+						{% endif %}
 					</div>
 					<div class="radio-inline">
-					  <label><input type="radio" name="gender" value="f" required>Female</label>
+						{% if user.gender == 'f' %}
+					  		<label><input type="radio" name="gender" value="f" required checked>Female</label>
+						{% else %}
+							<label><input type="radio" name="gender" value="f" required>Female</label>
+						{% endif %}
 					</div>
 					<input type="hidden" name="user_id" value="{{user.id}}">
 					<div class="form-group">
