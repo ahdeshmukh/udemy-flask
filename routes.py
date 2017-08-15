@@ -80,6 +80,11 @@ def update_account():
     return render_template("profile.html", user=user)
 
 
+@app.route('/about')
+def about():
+    return 'About'
+
+
 @app.route('/post-json', methods=['POST'])
 def post_json():
     json_dict = request.get_json()
