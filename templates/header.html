@@ -8,15 +8,26 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="#">Amit Flask Tutorial</a>
-      <p class="hidden-xs navbar-text">Hello, {{user.first_name}}</p>
+      {% if(user) %}
+        <a class="navbar-brand" href="{{url_for('.get_user', user_id=user.id)}}">Amit Flask Tutorial</a>
+      {% else %}
+        <a class="navbar-brand" href="{{url_for('.index')}}">Amit Flask Tutorial</a>
+      {% endif %}
+      {% if(user) %}
+        <p class="hidden-xs navbar-text">Hello, {{user.first_name}}</p>
+      {% endif %}
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-      <p class="visible-xs navbar-text navbar-right">Hello, {{user.first_name}}</p>
+      {% if(user) %}
+        <p class="visible-xs navbar-text navbar-right">Hello, {{user.first_name}}</p>
+      {% endif %}
+
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="{{url_for('.get_user', user_id=user.id)}}">Profile</a></li>
+        {% if(user) %}
+          <li><a href="{{url_for('.get_user', user_id=user.id)}}">Profile</a></li>
+        {% endif %}
         <li><a href="{{url_for('.about')}}">About</a></li>
       </ul>
     </div><!-- /.navbar-collapse -->

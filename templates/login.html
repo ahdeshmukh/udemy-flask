@@ -1,5 +1,6 @@
 {% extends "index.html" %}
 {% block body %}
+{% include "header.html" %}
 <div class="container">
     <div class="wrapper">
         <form action="{{url_for('login_success')}}" method="POST" class="form-signin">
