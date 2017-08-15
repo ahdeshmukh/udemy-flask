@@ -82,7 +82,7 @@ def update_account():
 
 @app.route('/about')
 def about():
-    return 'About'
+    return render_template("about.html")
 
 
 @app.route('/post-json', methods=['POST'])
