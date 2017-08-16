@@ -48,6 +48,13 @@
 		</div>
 		<div class="col-md-9">
             <div class="profile-content" id="profile-user-description">
+				{% with messages = get_flashed_messages(with_categories=true) %}
+					{% if messages %}
+						{% for category, message in messages %}
+							<div class="flask-flash-message alert-{{category}}">{{ message }}</div>
+						{% endfor %}
+					{% endif %}
+				{% endwith %}
 			   Description
             </div>
 			<div class="profile-content" id="profile-user-my-account">

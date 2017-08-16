@@ -1,4 +1,4 @@
-from flask import render_template, request, jsonify, redirect,url_for
+from flask import render_template, request, jsonify, redirect, url_for, flash
 from datetime import datetime
 from sqlalchemy import text
 from passlib.apps import custom_app_context as pwd_context #https://bitbucket.org/ecollins/passlib/wiki/Home
@@ -78,10 +78,11 @@ def update_account():
         user_service = UserService()
         update_account_result = user_service.update_user_account(user_data)
         if update_account_result['success']:
-            return redirect(url_for('.get_user', user_id=request.form['user_id']))
+            flash('Successfully updated user account', 'success')
         else:
             # try flask flash
-            pass
+            flash('There was an error in updating your information', 'error')
+        return redirect(url_for('.get_user', user_id=request.form['user_id']))
 
 
 @app.route('/about')

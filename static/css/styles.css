@@ -170,3 +170,8 @@ body {
 }
 
 ul.nav a:hover { color: orange !important; }
+
+.flask-flash-message {
+  padding:10px;
+  margin-bottom:15px;
+}

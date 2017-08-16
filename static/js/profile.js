@@ -15,5 +15,7 @@
             $("#profile-user-my-account").show();
             $("#profile-user-description").hide();
         });
+        //$("div.flask-flash-message").delay(4000).hide();
+        setTimeout('$("div.flask-flash-message").fadeOut()',2000);
     });
 })();
