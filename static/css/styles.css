@@ -168,3 +168,5 @@ body {
   background: #fff;
   min-height: 460px;
 }
+
+ul.nav a:hover { color: orange !important; }

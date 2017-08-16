@@ -76,8 +76,12 @@ def update_account():
             'title': request.form['title']
         }
         user_service = UserService()
-        user = user_service.update_user_account(user_data)
-    return render_template("profile.html", user=user)
+        update_account_result = user_service.update_user_account(user_data)
+        if update_account_result['success']:
+            return redirect(url_for('.get_user', user_id=request.form['user_id']))
+        else:
+            # try flask flash
+            pass
 
 
 @app.route('/about')
