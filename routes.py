@@ -81,7 +81,7 @@ def update_account():
             flash('Successfully updated user account', 'success')
         else:
             # try flask flash
-            flash('There was an error in updating your information', 'error')
+            flash('There was an error in updating your information', 'danger')
         return redirect(url_for('.get_user', user_id=request.form['user_id']))
 
 
