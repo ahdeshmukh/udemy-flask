@@ -173,27 +173,16 @@ body {
 ul.nav a:hover { color: orange !important; }
 
 .flask-flash-message {
-  padding:10px;
-  margin-bottom:15px;
+  padding: 10px;
+  margin: auto;
   opacity: 0.8;
   z-index: 10;
-  max-width: 60%;
+  max-width: 400px;
   color: #FFFFFF;
-  position: fixed;
-    display: block;
-    top: 50%;
-    left: 50%;
+  position: absolute;
+  top: 60px;
+  right: 10px;
 }
-/*@media (min-width: @screen-sm-min) {
-    .flask-flash-message {left: 300px;}
-}
-@media (min-width: @screen-md-min) {
-    .flask-flash-message {left: 500px;}
-}
-@media (min-width: @screen-lg-min) { {
-    .flask-flash-message {left: 600px;}
-}*/
-
 .flask-flash-message-success {
     background-color: #296510
 }

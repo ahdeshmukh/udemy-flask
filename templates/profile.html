@@ -2,13 +2,7 @@
 {% block body %}
 {% include "header.html" %}
 <div class="container">
-	<div class="row">
-		<div class="visible-xs">XS</div>
-		<div class="visible-sm">SM</div>
-		<div class="visible-md">MD</div>
-		<div class="visible-lg">LG</div>
-	</div>
-    {% if not user %}
+	{% if not user %}
     <div class="row">
         <div class="col-xs-12">User not found</div>
     </div>
