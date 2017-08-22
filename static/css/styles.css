@@ -174,4 +174,22 @@ ul.nav a:hover { color: orange !important; }
 .flask-flash-message {
   padding:10px;
   margin-bottom:15px;
+  position: absolute;
+  opacity: 0.8;
+  z-index: 10;
+  max-width: 60%;
+  color: #FFFFFF
+}
+
+.flask-flash-message-success {
+    background-color: #296510
+}
+.flask-flash-message-danger {
+    background-color: #d45a5a
+}
+.flask-flash-message-warning {
+    background-color: #d48c08
+}
+.flask-flash-message-info {
+    background-color: #448bc7
 }
