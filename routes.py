@@ -1,11 +1,15 @@
 from flask import render_template, request, jsonify, redirect, url_for, flash
 from datetime import datetime
+from flask_login import LoginManager, UserMixin, login_required, login_user, logout_user, current_user
 from sqlalchemy import text
 from passlib.apps import custom_app_context as pwd_context #https://bitbucket.org/ecollins/passlib/wiki/Home
 
 from app import app, db
 from services.user import UserService
 from services.auth import AuthService
+
+login_manager = LoginManager()
+login_manager.init_app(app)
 
 
 @app.route('/')
@@ -62,6 +66,32 @@ def get_user(user_id):
     user_service = UserService()
     user = user_service.get_user(user_id)
     return render_template("profile.html", user=user)
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    user_service = UserService()
+    user = user_service.load_user(user_id)
+    return user
+
+@app.route('/flask-login-login/<user_id>')
+def flask_login_login(user_id):
+    user_service = UserService()
+    user = user_service.load_user(user_id)
+    login_user(user)
+    return "You are now logged in"
+
+@app.route('/flask-login-logout')
+@login_required
+def flask_login_logout():
+    logout_user()
+    return "You are now logged out"
+
+
+@app.route('/flask-login-home')
+@login_required
+def flask_login_home():
+    return "The current user is " + current_user.first_name + " " + current_user.last_name
 
 
 @app.route('/update-account', methods=['POST'])

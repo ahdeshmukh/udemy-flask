@@ -147,7 +147,12 @@ class UserService:
         user.title = user_data['title']
         user.gender = user_data['gender']
 
+        # TODO: FlaskSQLAlchemy as a strategy pattern
         flask_sql_alchemy = FlaskSQLAlchemy()
         return flask_sql_alchemy.commit()
+
+
+    def load_user(self, user_id):
+        return User.query.get(int(user_id))
 
 
