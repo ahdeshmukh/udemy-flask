@@ -16,6 +16,6 @@
             $("#profile-user-description").hide();
         });
         //$("div.flask-flash-message").delay(4000).hide();
-        setTimeout('$("div.flask-flash-message").fadeOut(1000)', 4000);
+        //setTimeout('$("div.flask-flash-message").fadeOut(1000)', 4000);
     });
 })();
