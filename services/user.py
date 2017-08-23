@@ -142,6 +142,9 @@ class UserService:
 
     def load_user(self, user_id):
         user = User.query.get(user_id)
+        if not user:
+            return None
+
         if not user.gender:
             image_url = 'https://i.stack.imgur.com/IHLNO.jpg'
         else:
@@ -158,6 +161,7 @@ class UserService:
             image_url += str(image_num) + '.jpg'
 
         user.image = image_url
+
         return user
 
 
