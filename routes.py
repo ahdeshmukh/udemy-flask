@@ -56,15 +56,33 @@ def login_success():
         if login_result['success']:
             #return render_template("profile.html", user=login_result['user'])
             # return redirect(url_for("get_user", user=login_result['user']))
+            user_service = UserService()
+            user = user_service.load_user(login_result['user']['id'])
+            login_user(user)
             return redirect(url_for('.get_user', user_id=login_result['user']['id']))
 
     return render_template("login.html", invalid_credentials=True)
 
 
+@app.route('/logout')
+@login_required
+def logout():
+    #logout_user()
+    #return render_template("login.html")
+    if logout_user():
+        flash('Successfully logged out', 'success')
+    else:
+        # try flask flash
+        flash('Error in logging you out. Please try again later', 'danger')
+    return redirect(url_for('.index'))
+
+
 @app.route('/user/<user_id>')
+@login_required
 def get_user(user_id):
-    user_service = UserService()
-    user = user_service.get_user(user_id)
+    #user_service = UserService()
+    #user = user_service.get_user(user_id)
+    user = current_user
     return render_template("profile.html", user=user)
 
 
@@ -74,27 +92,9 @@ def load_user(user_id):
     user = user_service.load_user(user_id)
     return user
 
-@app.route('/flask-login-login/<user_id>')
-def flask_login_login(user_id):
-    user_service = UserService()
-    user = user_service.load_user(user_id)
-    login_user(user)
-    return "You are now logged in"
-
-@app.route('/flask-login-logout')
-@login_required
-def flask_login_logout():
-    logout_user()
-    return "You are now logged out"
-
-
-@app.route('/flask-login-home')
-@login_required
-def flask_login_home():
-    return "The current user is " + current_user.first_name + " " + current_user.last_name
-
 
 @app.route('/update-account', methods=['POST'])
+@login_required
 def update_account():
     if request.method == 'POST':
         user_data = {
