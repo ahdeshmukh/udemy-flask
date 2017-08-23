@@ -7,6 +7,8 @@ from services.flasksqlalchemy import FlaskSQLAlchemy
 from services.flasklogging import FlaskLogging
 
 class UserService:
+    flask_sql_alchemy = FlaskSQLAlchemy()
+    flask_logging = FlaskLogging()
 
     def register(self, user):
         registration_error = []
@@ -55,8 +57,8 @@ class UserService:
             return {'success': False, 'errors': errors}
 
         password_hash = pwd_context.hash(user['password'])
-        flask_sql_alchemy = FlaskSQLAlchemy()
-        count = flask_sql_alchemy.count('User', {'val1': User.email, 'val2': user['email'], 'operation': 'eq'})
+        #flask_sql_alchemy = FlaskSQLAlchemy()
+        count = self.flask_sql_alchemy.count('User', {'val1': User.email, 'val2': user['email'], 'operation': 'eq'})
         if not count:
             new_user = User()
             new_user.email = user['email']
@@ -69,7 +71,7 @@ class UserService:
             if 'description' in user:
                 new_user.description = user['description']
 
-            return flask_sql_alchemy.add(new_user)
+            return self.flask_sql_alchemy.add(new_user)
         else:
             errors.append('Failed to register. Email already exists')
             return {'success': False, 'errors': errors}
@@ -103,8 +105,7 @@ class UserService:
                     "email": result[0].email, "gender": result[0].gender, "zipcode": result[0].zipcode,
                     "title": result[0].title, "image": image_url}
         except Exception as e:
-            flask_logging = FlaskLogging()
-            flask_logging.log_info(str(e))
+            self.flask_logging.log_info(str(e))
         return user
 
     def update_user_account(self, user_data):
@@ -141,23 +142,27 @@ class UserService:
 
 
     def load_user(self, user_id):
-        user = User.query.get(int(user_id))
-        if not user.gender:
-            image_url = 'https://i.stack.imgur.com/IHLNO.jpg'
-        else:
-            image_url = 'https://randomuser.me/api/portraits/'
-            if user.gender == 'm':
-                image_url += 'men/'
+        try:
+            user = User.query.get(20)
+            if not user.gender:
+                image_url = 'https://i.stack.imgur.com/IHLNO.jpg'
             else:
-                image_url += 'women/'
+                image_url = 'https://randomuser.me/api/portraits/'
+                if user.gender == 'm':
+                    image_url += 'men/'
+                else:
+                    image_url += 'women/'
 
-            # use 50 images, then recycle
-            image_num = int(user_id) % 50
-            if image_num == 0:
-                image_num = 1
-            image_url += str(image_num) + '.jpg'
+                # use 50 images, then recycle
+                image_num = int(user_id) % 50
+                if image_num == 0:
+                    image_num = 1
+                image_url += str(image_num) + '.jpg'
 
-        user.image = image_url
+            user.image = image_url
+        except:
+            user = {}
+
         return user
 
 
