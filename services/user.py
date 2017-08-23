@@ -128,18 +128,6 @@ class UserService:
         if errors:
             return {'success': False, 'errors': errors}
 
-        # user_from_db = self.get_user(user_data['user_id'])
-        #
-        # user = User()
-        # user.id = user_data['user_id']
-        # user.first_name = user_data['first_name']
-        # user.last_name = user_data['last_name']
-        # user.email = user_from_db['email']
-        # user.password = '$6$rounds=656000$S4GS5srTzNh9j.5t$R9q0OsFiiQK3KxDv5kKGN8mTgntmZKMbbBOZE5boubXVB2kSOSy0yGEFMT847NDN0sw/0qu0SqWh1QIq8c9um1'
-        # user.zipcode = user_data['zipcode']
-        # user.title = user_data['title']
-        # user.gender = user_data['gender']
-
         user = User.query.filter_by(id=user_data['user_id']).first()
         user.first_name = user_data['first_name']
         user.last_name = user_data['last_name']
