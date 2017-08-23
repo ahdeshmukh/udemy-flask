@@ -140,29 +140,24 @@ class UserService:
         flask_sql_alchemy = FlaskSQLAlchemy()
         return flask_sql_alchemy.commit()
 
-
     def load_user(self, user_id):
-        try:
-            user = User.query.get(20)
-            if not user.gender:
-                image_url = 'https://i.stack.imgur.com/IHLNO.jpg'
+        user = User.query.get(user_id)
+        if not user.gender:
+            image_url = 'https://i.stack.imgur.com/IHLNO.jpg'
+        else:
+            image_url = 'https://randomuser.me/api/portraits/'
+            if user.gender == 'm':
+                image_url += 'men/'
             else:
-                image_url = 'https://randomuser.me/api/portraits/'
-                if user.gender == 'm':
-                    image_url += 'men/'
-                else:
-                    image_url += 'women/'
+                image_url += 'women/'
 
-                # use 50 images, then recycle
-                image_num = int(user_id) % 50
-                if image_num == 0:
-                    image_num = 1
-                image_url += str(image_num) + '.jpg'
+            # use 50 images, then recycle
+            image_num = int(user_id) % 50
+            if image_num == 0:
+                image_num = 1
+            image_url += str(image_num) + '.jpg'
 
-            user.image = image_url
-        except:
-            user = {}
-
+        user.image = image_url
         return user
 
 
