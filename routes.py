@@ -12,11 +12,22 @@ login_manager.init_app(app)
 
 @app.route('/')
 def index():
+    try:
+        if current_user:
+            return redirect(url_for('.get_user', user_id=current_user.id))
+    except:
+        pass
     return render_template("login.html")
 
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
+    try:
+        if current_user:
+            return redirect(url_for('.get_user', user_id=current_user.id))
+    except:
+        pass
+
     registration_errors = None
     if request.method == 'POST':
         registration_data = {
