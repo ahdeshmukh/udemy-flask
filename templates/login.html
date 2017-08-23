@@ -2,13 +2,7 @@
 {% block body %}
 {% include "header.html" %}
 <div class="container">
-    {% with messages = get_flashed_messages(with_categories=true) %}
-		{% if messages %}
-			{% for category, message in messages %}
-				<div class="flask-flash-message flask-flash-message-{{category}}">{{ message }}</div>
-			{% endfor %}
-		{% endif %}
-	{% endwith %}
+    {% include "flask-flash.html" %}<!-- used to print flash messages -->
     <div class="wrapper">
         <form action="{{url_for('login_success')}}" method="POST" class="form-signin">
             <h2 class="form-signin-heading">Login</h2>

@@ -7,13 +7,7 @@
         <div class="col-xs-12">User not found</div>
     </div>
     {% else %}
-	{% with messages = get_flashed_messages(with_categories=true) %}
-		{% if messages %}
-			{% for category, message in messages %}
-				<div class="flask-flash-message flask-flash-message-{{category}}">{{ message }}</div>
-			{% endfor %}
-		{% endif %}
-	{% endwith %}
+	{% include "flask-flash.html" %}<!-- used to print flash messages -->
     <div class="row profile">
 		<div class="col-md-3">
 			<div class="profile-sidebar">
