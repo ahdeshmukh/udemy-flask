@@ -195,3 +195,9 @@ ul.nav a:hover { color: orange !important; }
 .flask-flash-message-info {
     background-color: #448bc7
 }
+.about-panel-heading {
+    background-color: #afbfbe !important;
+}
+.about-page {
+   padding:20px 0;
+}

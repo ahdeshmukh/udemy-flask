@@ -124,6 +124,9 @@ def update_account():
 
 @app.route('/about')
 def about():
+    user = current_user
+    if hasattr(user, 'id'):
+        return render_template("about.html", user=user)
     return render_template("about.html")
 
 

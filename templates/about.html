@@ -1,7 +1,79 @@
 {% extends "index.html" %}
 {% block body %}
 {% include "header.html" %}
-<div class="container">
-    <p>About page</p>
-</div>
+<div class="about-page container">
+    <div class="panel panel-default">
+      <div class="panel-heading about-panel-heading">
+        Who has developed this site?
+      </div>
+      <div class="panel-body about-panel-body">
+        This site has been developed by Amit Deshmukh.
+      </div>
+    </div>
+    <div class="panel panel-default">
+      <div class="panel-heading about-panel-heading">
+        Do you have experience with AngularJS
+      </div>
+      <div class="panel-body about-panel-body">
+        Yes, I have been working with AngularJS 1.x for the last 2 years.
+      </div>
+    </div>
+    <div class="panel panel-default">
+      <div class="panel-heading about-panel-heading">
+        What is the purpose of this site?
+      </div>
+      <div class="panel-body about-panel-body">
+        The purpose of this site is to learn Angular 2.
+      </div>
+    </div>
+    <div class="panel panel-default">
+      <div class="panel-heading about-panel-heading">
+        Which technology has been used to develop this site?
+      </div>
+      <div class="panel-body about-panel-body">
+        This site has been developed using Angular 2, npm for package management, Angular Cli for deployment, Firebase for hosting and Git for version control.
+      </div>
+    </div>
+    <div class="panel panel-default">
+      <div class="panel-heading about-panel-heading">
+        What is the Git repo for this site?
+      </div>
+      <div class="panel-body about-panel-body">
+        <a target="_blank" href="https://github.com/ahdeshmukh/angular2cli.git">https://github.com/ahdeshmukh/angular2cli.git</a>
+      </div>
+    </div>
+    <div class="panel panel-default">
+      <div class="panel-heading about-panel-heading">
+        How is the login implemented?
+      </div>
+      <div class="panel-body about-panel-body">
+        The login does not require you to provide a username and password. All you need to do is select a role and submit the form.
+        The login functionality will create a user object in local storage that will be used to maintain the login session. This closely resembles a real login.
+      </div>
+    </div>
+    <div class="panel panel-default">
+      <div class="panel-heading about-panel-heading">
+        What this project does not do?
+      </div>
+      <div class="panel-body about-panel-body">
+        This project does not have any backend code. It does not communicate with any database.
+      </div>
+    </div>
+    <div class="panel panel-default">
+      <div class="panel-heading about-panel-heading">
+        How do you display the users?
+      </div>
+      <div class="panel-body about-panel-body">
+        The users are displayed using the API available at https://randomuser.me/
+      </div>
+    </div>
+    <div class="panel panel-default">
+      <div class="panel-heading about-panel-heading">
+        Is the data on the website real?
+      </div>
+      <div class="panel-body about-panel-body">
+        No, the data on the website is sample data.
+      </div>
+    </div>
+  </div>
 {% endblock %}
