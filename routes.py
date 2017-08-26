@@ -67,7 +67,7 @@ def login_success():
             # return redirect(url_for("get_user", user=login_result['user']))
             user_service = UserService()
             user = user_service.load_user(login_result['user']['id'])
-            login_user(user)
+            login_user(user, remember=True) #https://flask-login.readthedocs.io/en/latest/#remember-me
             return redirect(url_for('.get_user', user_id=login_result['user']['id']))
 
     return render_template("login.html", invalid_credentials=True)
