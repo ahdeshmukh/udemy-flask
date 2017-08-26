@@ -27,6 +27,8 @@
       <ul class="nav navbar-nav navbar-right">
         {% if(user) %}
           <li><a href="{{url_for('.get_user', user_id=user.id)}}">Profile</a></li>
+        {% else %}
+          <li><a href="{{url_for('.index')}}">Home</a></li>
         {% endif %}
         <li><a href="{{url_for('.about')}}">About</a></li>
       </ul>
