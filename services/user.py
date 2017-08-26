@@ -1,5 +1,6 @@
 import recaptcha2
 from passlib.apps import custom_app_context as pwd_context #https://bitbucket.org/ecollins/passlib/wiki/Home
+from validate_email import validate_email #https://pypi.python.org/pypi/validate_email
 
 from app import app, db
 from models.user import User
@@ -34,6 +35,8 @@ class UserService:
             errors.append('Last name cannot be empty')
         if len(user['email']) == 0:
             errors.append('Email cannot be empty')
+        if not validate_email(user['email']):
+            errors.append('Invalid email format. Eg: of valid format: john.doe@example.com')
         if len(user['password']) == 0:
             errors.append('Password cannot be empty')
         if len(user['confirm_password']) == 0:
