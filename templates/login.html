@@ -5,6 +5,7 @@
     {% include "flask-flash.html" %}<!-- used to print flash messages -->
     <div class="wrapper">
         <form action="{{url_for('login_success')}}" method="POST" class="form-signin">
+            <b>Read the <a href="{{ url_for('about') }}">About</a> page for instructions to use the site.</b>
             <h2 class="form-signin-heading">Login</h2>
             {% if invalid_credentials %}
                 <div class="text-danger" style="margin-bottom:10px;">Invalid email or password</div>
