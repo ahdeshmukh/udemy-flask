@@ -1,4 +1,4 @@
-from flask import render_template, request, jsonify, redirect, url_for, flash
+from flask import render_template, request, jsonify, redirect, url_for, flash, g
 from datetime import datetime
 from flask_login import LoginManager, login_required
 
@@ -67,10 +67,10 @@ def login_success():
         login_result = auth_service.login({'email': email, 'password': password})
         if login_result['success']:
             user = login_result['user']
-            print(user.roles)
             #login_user(user, remember=True) #https://flask-login.readthedocs.io/en/latest/#remember-me
             user_service = UserService()
             user_service.login_user(user)
+            g.user = user
             return redirect(url_for('.get_user', user_id=user.id))
 
     return render_template("login.html", invalid_credentials=True)
@@ -141,6 +141,14 @@ def about():
     if hasattr(user, 'id'):
         return render_template("about.html", user=user)
     return render_template("about.html")
+
+# common variables to be used across all templates. http://flask.pocoo.org/docs/0.12/templating/
+@app.context_processor
+def header_processor():
+    user_service = UserService()
+    user = user_service.get_current_user()
+    is_admin = user_service.is_admin()
+    return dict(user=user, is_admin=is_admin)
 
 
 @app.route('/post-json', methods=['POST'])
