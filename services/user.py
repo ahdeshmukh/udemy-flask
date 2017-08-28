@@ -148,26 +148,24 @@ class UserService:
         if not user:
             return None
 
-        if not user.gender:
-            image_url = 'https://i.stack.imgur.com/IHLNO.jpg'
-        else:
+        user.image = self.get_user_image(user)
+        return user
+
+    def get_current_user(self):
+        return current_user
+
+    def get_user_image(self, user):
+        image_url = 'https://i.stack.imgur.com/IHLNO.jpg'
+        if user.gender:
             image_url = 'https://randomuser.me/api/portraits/'
             if user.gender == 'm':
                 image_url += 'men/'
             else:
                 image_url += 'women/'
 
-            # use 50 images, then recycle
-            image_num = int(user_id) % 50
+            image_num = int(user.id) % 50
             if image_num == 0:
                 image_num = 1
             image_url += str(image_num) + '.jpg'
 
-        user.image = image_url
-
-        return user
-
-    def get_current_user(self):
-        return current_user
-
-
+        return image_url
