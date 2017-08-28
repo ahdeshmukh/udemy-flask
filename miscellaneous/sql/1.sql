@@ -32,8 +32,8 @@ CREATE TABLE flask_user_role
   	CONSTRAINT flask_user_role_user_id_fkey FOREIGN KEY (user_id) REFERENCES flask_user (id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION
 );
 
-
+INSERT INTO flask_role (name, description) VALUES ('authenticated', 'Default role for all registered users');
 INSERT INTO flask_role (name, description) VALUES ('admin', 'Super admin role');
-INSERT INTO flask_role (name, description) VALUES ('authenticated', 'Default role for all registerd users');
 
-INSERT INTO flask_user (first_name, last_name, email, password, zipcode, title) VALUES ('Admin', 'Admin', 'admin@example.com', '$6$rounds=656000$S4GS5srTzNh9j.5t$R9q0OsFiiQK3KxDv5kKGN8mTgntmZKMbbBOZE5boubXVB2kSOSy0yGEFMT847NDN0sw/0qu0SqWh1QIq8c9um1', '20190', 'Site Admin')
+INSERT INTO flask_user (first_name, last_name, email, password, zipcode, title) VALUES ('Admin', 'Admin', 'admin@example.com', '$6$rounds=656000$S4GS5srTzNh9j.5t$R9q0OsFiiQK3KxDv5kKGN8mTgntmZKMbbBOZE5boubXVB2kSOSy0yGEFMT847NDN0sw/0qu0SqWh1QIq8c9um1', '20190', 'Site Admin');
+INSERT INTO flask_user_role (user_id, role_id) VALUES(1, 2);

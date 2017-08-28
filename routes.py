@@ -1,6 +1,6 @@
 from flask import render_template, request, jsonify, redirect, url_for, flash
 from datetime import datetime
-from flask_login import LoginManager, login_required, login_user, logout_user, current_user
+from flask_login import LoginManager, login_required, login_user, logout_user
 
 from app import app, db
 from services.user import UserService
@@ -12,6 +12,8 @@ login_manager.init_app(app)
 
 @app.route('/')
 def index():
+    user_service = UserService()
+    current_user = user_service.get_current_user()
     try:
         if current_user:
             return redirect(url_for('.get_user', user_id=current_user.id))
@@ -22,6 +24,8 @@ def index():
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
+    user_service = UserService()
+    current_user = user_service.get_current_user()
     try:
         if current_user:
             return redirect(url_for('.get_user', user_id=current_user.id))
@@ -87,9 +91,9 @@ def logout():
 @app.route('/user/<user_id>')
 @login_required
 def get_user(user_id):
-    #user_service = UserService()
-    #user = user_service.get_user(user_id)
-    user = current_user
+    user_service = UserService()
+    user = user_service.get_current_user()
+    #user = current_user
     return render_template("profile.html", user=user)
 
 
@@ -124,7 +128,8 @@ def update_account():
 
 @app.route('/about')
 def about():
-    user = current_user
+    user_service = UserService()
+    user = user_service.get_current_user()
     if hasattr(user, 'id'):
         return render_template("about.html", user=user)
     return render_template("about.html")

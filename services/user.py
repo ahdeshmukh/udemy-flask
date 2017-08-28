@@ -1,6 +1,7 @@
 import recaptcha2
 from passlib.apps import custom_app_context as pwd_context #https://bitbucket.org/ecollins/passlib/wiki/Home
 from validate_email import validate_email #https://pypi.python.org/pypi/validate_email
+from flask_login import current_user
 
 from app import app, db
 from models.user import User
@@ -165,5 +166,8 @@ class UserService:
         user.image = image_url
 
         return user
+
+    def get_current_user(self):
+        return current_user
 
 
