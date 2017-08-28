@@ -67,6 +67,7 @@ def login_success():
         login_result = auth_service.login({'email': email, 'password': password})
         if login_result['success']:
             user = login_result['user']
+            print(user.roles)
             #login_user(user, remember=True) #https://flask-login.readthedocs.io/en/latest/#remember-me
             user_service = UserService()
             user_service.login_user(user)
@@ -95,6 +96,14 @@ def get_user(user_id):
     #user = current_user
     return render_template("profile.html", user=user)
 
+
+@app.route('/users')
+@login_required
+def get_users():
+    user_service = UserService()
+    users = user_service.get_users()
+    user = user_service.get_current_user()
+    return render_template("users.html", users=users)
 
 @login_manager.user_loader
 def load_user(user_id):

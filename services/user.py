@@ -2,6 +2,7 @@ import recaptcha2
 from passlib.apps import custom_app_context as pwd_context #https://bitbucket.org/ecollins/passlib/wiki/Home
 from validate_email import validate_email #https://pypi.python.org/pypi/validate_email
 from flask_login import current_user, login_user, logout_user
+from sqlalchemy import text
 
 from app import app, db
 from models.user import User
@@ -149,6 +150,11 @@ class UserService:
             return None
 
         user.image = self.get_user_image(user)
+        user.roles = [1] # all users have authenticated role
+        roles_query = text('SELECT role_id FROM flask_user_role WHERE user_id = :user_id')
+        roles_result = db.engine.execute(roles_query, user_id=user_id)
+        for role in roles_result:
+            user.roles.extend(role)
         return user
 
     def get_current_user(self):
@@ -171,10 +177,17 @@ class UserService:
         return image_url
 
     def load_user_by_email(self, email):
+        #TODO: get id from flask_user table based on email and then use load_user function
         user = None
         result = User.query.filter(User.email == email).limit(1)
         for row in result:
             user = row
+        user.image = self.get_user_image(user)
+        user.roles = [1]  # all users have authenticated role
+        roles_query = text('SELECT role_id FROM flask_user_role WHERE user_id = :user_id')
+        roles_result = db.engine.execute(roles_query, user_id=user.id)
+        for role in roles_result:
+            user.roles.extend(role)
         return user
 
     def login_user(self, user, remember=True):
@@ -182,3 +195,25 @@ class UserService:
 
     def logout_user(self):
         return logout_user()
+
+    def is_admin(self):
+        user = self.get_current_user()
+        is_admin = False
+        try:
+            if 2 in user.roles:
+                is_admin = True
+        except:
+            pass
+
+        return is_admin
+
+    def get_users(self):
+        data = []
+        if self.is_admin():
+            users = User.query.all()
+            for user in users:
+                image = self.get_user_image(user)
+                if user.id != 1:
+                    data.append({"first_name": user.first_name, "last_name": user.last_name, "email": user.email, "image": image})
+
+        return data

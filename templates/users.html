@@ -1,0 +1,19 @@
+{% extends "index.html" %}
+{% block body %}
+{% include "header.html" %}
+<div class="container">
+    <div class="row row-users">
+        {% if users %}
+            {% for user in users %}
+                <div class="col-sm-4">
+                    <div><img class="img-responsive img-circle" src="{{user.image}}" /></div>
+                    <div>{{user.first_name}} {{user.last_name}} </div>
+                    <div>{{user.email}} </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="col-xs-12">No users found</div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
