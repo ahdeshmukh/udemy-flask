@@ -77,6 +77,7 @@
 						<label for="zipcode">Zipcode:</label>
 						<input type="text" class="form-control" id="zipcode" name="zipcode" placeholder="Zip Code" required="" maxlength="5" minlength="5" value="{{user.zipcode}}" />
 					</div>
+					{% if not is_admin  %}
 					<div class="radio-inline">
 						{% if user.gender == 'm' %}
 					  		<label><input type="radio" name="gender" value="m" required checked>Male</label>
@@ -91,6 +92,7 @@
 							<label><input type="radio" name="gender" value="f" required>Female</label>
 						{% endif %}
 					</div>
+					{% endif %}
 					<input type="hidden" name="user_id" value="{{user.id}}">
 					<div class="form-group">
 						<button class="btn btn-md btn-primary" type="submit">Save</button>

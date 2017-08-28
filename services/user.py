@@ -120,8 +120,6 @@ class UserService:
             errors.append('First name cannot be empty')
         if len(user_data['last_name']) == 0:
             errors.append('Last name cannot be empty')
-        if len(user_data['gender']) == 0:
-            errors.append('Must select a gender')
         if len(user_data['title']) == 0:
             errors.append('Title cannot be empty')
         if len(user_data['zipcode']) == 0:
@@ -130,6 +128,8 @@ class UserService:
             errors.append('Zipcode must be 5 digit long')
         if not user_data['zipcode'].isnumeric():
             errors.append('Zipcode must be a valid 5 digit number')
+        if not self.is_admin() and len(user_data['gender']) == 0:
+            errors.append('Must select a gender')
 
         if errors:
             return {'success': False, 'errors': errors}
@@ -139,7 +139,9 @@ class UserService:
         user.last_name = user_data['last_name']
         user.zipcode = user_data['zipcode']
         user.title = user_data['title']
-        user.gender = user_data['gender']
+        if not self.is_admin():
+            user.gender = user_data['gender']
+            user.gender = user_data['gender']
 
         # TODO: FlaskSQLAlchemy as a strategy pattern
         return self.flask_sql_alchemy.commit()

@@ -116,15 +116,17 @@ def load_user(user_id):
 @login_required
 def update_account():
     if request.method == 'POST':
+        user_service = UserService()
         user_data = {
             'user_id': request.form['user_id'],
             'first_name': request.form['firstName'],
             'last_name': request.form['lastName'],
-            'gender': request.form['gender'],
             'zipcode': request.form['zipcode'],
             'title': request.form['title']
         }
-        user_service = UserService()
+        if not user_service.is_admin():
+            user_data['gender'] = request.form['gender']
+
         update_account_result = user_service.update_user_account(user_data)
         if update_account_result['success']:
             flash('Successfully updated user account', 'success')
