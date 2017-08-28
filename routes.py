@@ -1,6 +1,6 @@
 from flask import render_template, request, jsonify, redirect, url_for, flash
 from datetime import datetime
-from flask_login import LoginManager, login_required, login_user, logout_user
+from flask_login import LoginManager, login_required
 
 from app import app, db
 from services.user import UserService
@@ -65,14 +65,12 @@ def login_success():
         password = request.form['password']
         auth_service = AuthService()
         login_result = auth_service.login({'email': email, 'password': password})
-
         if login_result['success']:
-            #return render_template("profile.html", user=login_result['user'])
-            # return redirect(url_for("get_user", user=login_result['user']))
+            user = login_result['user']
+            #login_user(user, remember=True) #https://flask-login.readthedocs.io/en/latest/#remember-me
             user_service = UserService()
-            user = user_service.load_user(login_result['user']['id'])
-            login_user(user, remember=True) #https://flask-login.readthedocs.io/en/latest/#remember-me
-            return redirect(url_for('.get_user', user_id=login_result['user']['id']))
+            user_service.login_user(user)
+            return redirect(url_for('.get_user', user_id=user.id))
 
     return render_template("login.html", invalid_credentials=True)
 
@@ -80,7 +78,8 @@ def login_success():
 @app.route('/logout')
 @login_required
 def logout():
-    if logout_user():
+    user_service = UserService()
+    if user_service.logout_user():
         flash('Successfully logged out', 'success')
     else:
         # try flask flash

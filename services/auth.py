@@ -3,7 +3,7 @@ from sqlalchemy import text
 from datetime import datetime
 
 from app import app, db
-
+from services.user import UserService
 
 class AuthService:
 
@@ -17,19 +17,20 @@ class AuthService:
         if login_error:
             return {'success': False, 'errors': login_error}
 
-        sql = text('SELECT id, first_name, last_name, email, password, zipcode FROM flask_user WHERE email = :email')
-        result = db.engine.execute(sql, email=credentials['email'])
+        user_service = UserService()
+        user = user_service.load_user_by_email(credentials['email'])
 
         auth = False
-        for row in result:
-            auth = pwd_context.verify(credentials['password'], row['password'])
+        if user:
+            try:
+                auth = pwd_context.verify(credentials['password'], user.password)
+            except:
+                pass
 
-        if auth:
-            update_last_login_sql = text('UPDATE flask_user SET last_login = :last_login WHERE id = :id')
-            db.engine.execute(update_last_login_sql, last_login=str(datetime.now()), id=row['id'])
-            user = {'id': row['id'], 'first_name': row['first_name'], 'last_name': row['last_name'], 'email': row['email'],
-                    'zipcode': row['zipcode']}
-            return {'success': True, 'user': user}
+            if auth:
+                update_last_login_sql = text('UPDATE flask_user SET last_login = :last_login WHERE id = :id')
+                db.engine.execute(update_last_login_sql, last_login=str(datetime.now()), id=user.id)
+                return {'success': True, 'user': user}
 
         login_error.append('Invalid Username or password')
         return {'success': False, 'errors': login_error}

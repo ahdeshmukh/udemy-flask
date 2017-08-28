@@ -1,7 +1,7 @@
 import recaptcha2
 from passlib.apps import custom_app_context as pwd_context #https://bitbucket.org/ecollins/passlib/wiki/Home
 from validate_email import validate_email #https://pypi.python.org/pypi/validate_email
-from flask_login import current_user
+from flask_login import current_user, login_user, logout_user
 
 from app import app, db
 from models.user import User
@@ -169,3 +169,16 @@ class UserService:
             image_url += str(image_num) + '.jpg'
 
         return image_url
+
+    def load_user_by_email(self, email):
+        user = None
+        result = User.query.filter(User.email == email).limit(1)
+        for row in result:
+            user = row
+        return user
+
+    def login_user(self, user, remember=True):
+        login_user(user, remember=remember) #https://flask-login.readthedocs.io/en/latest/#remember-me
+
+    def logout_user(self):
+        return logout_user()
