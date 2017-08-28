@@ -205,3 +205,6 @@ ul.nav a:hover { color: orange !important; }
 .row-users {
     margin:20px 0;
 }
+.col-users {
+    padding: 10px 0
+}

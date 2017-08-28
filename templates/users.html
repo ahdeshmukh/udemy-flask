@@ -5,7 +5,7 @@
     <div class="row row-users">
         {% if users %}
             {% for user in users %}
-                <div class="col-sm-4">
+                <div class="col-sm-4 col-users">
                     <div><img class="img-responsive img-circle" src="{{user.image}}" /></div>
                     <div>{{user.first_name}} {{user.last_name}} </div>
                     <div>{{user.email}} </div>
