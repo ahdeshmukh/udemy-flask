@@ -182,14 +182,16 @@ class UserService:
         #TODO: get id from flask_user table based on email and then use load_user function
         user = None
         result = User.query.filter(User.email == email).limit(1)
-        for row in result:
-            user = row
-        user.image = self.get_user_image(user)
-        user.roles = [1]  # all users have authenticated role
-        roles_query = text('SELECT role_id FROM flask_user_role WHERE user_id = :user_id')
-        roles_result = db.engine.execute(roles_query, user_id=user.id)
-        for role in roles_result:
-            user.roles.extend(role)
+        try:
+            user = result[0]
+            user.image = self.get_user_image(user)
+            user.roles = [1]  # all users have authenticated role
+            roles_query = text('SELECT role_id FROM flask_user_role WHERE user_id = :user_id')
+            roles_result = db.engine.execute(roles_query, user_id=user.id)
+            for role in roles_result:
+                user.roles.extend(role)
+        except:
+            pass
         return user
 
     def login_user(self, user, remember=True):
