@@ -1,4 +1,4 @@
-from flask import render_template, request, jsonify, redirect, url_for, flash, g
+from flask import render_template, request, jsonify, redirect, url_for, flash
 from datetime import datetime
 from flask_login import LoginManager, login_required
 
@@ -59,7 +59,7 @@ def register():
 
 
 @app.route('/login', methods=['POST'])
-def login_success():
+def login():
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
@@ -70,7 +70,6 @@ def login_success():
             #login_user(user, remember=True) #https://flask-login.readthedocs.io/en/latest/#remember-me
             user_service = UserService()
             user_service.login_user(user)
-            g.user = user
             return redirect(url_for('.get_user', user_id=user.id))
 
     return render_template("login.html", invalid_credentials=True)
