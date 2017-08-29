@@ -105,7 +105,7 @@ def get_user(user_id):
 def get_users():
     user_service = UserService()
     users = user_service.get_users()
-    user = user_service.get_current_user()
+    #user = user_service.get_current_user()
     return render_template("users.html", users=users)
 
 @login_manager.user_loader

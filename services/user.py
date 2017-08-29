@@ -218,6 +218,14 @@ class UserService:
             for user in users:
                 image = self.get_user_image(user)
                 if user.id != 1:
-                    data.append({"first_name": user.first_name, "last_name": user.last_name, "email": user.email, "image": image})
+                    data.append(
+                        {
+                            "id": user.id,
+                            "first_name": user.first_name,
+                            "last_name": user.last_name,
+                            "email": user.email,
+                            "image": image
+                        }
+                    )
 
         return data
