@@ -8,13 +8,13 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      {% if(user and user.id) %}
-        <a class="navbar-brand" href="{{url_for('.get_user', user_id=user.id)}}">Amit Flask Tutorial</a>
+      {% if(logged_in_user and logged_in_user.id) %}
+        <a class="navbar-brand" href="{{url_for('.get_user', user_id=logged_in_user.id)}}">Amit Flask Tutorial</a>
       {% else %}
         <a class="navbar-brand" href="{{url_for('.index')}}">Amit Flask Tutorial</a>
       {% endif %}
-      {% if(user and user.id) %}
-        <p class="hidden-xs navbar-text">Hello, {{user.first_name}}</p>
+      {% if(logged_in_user and logged_in_user.id) %}
+        <p class="hidden-xs navbar-text">Hello, {{logged_in_user.first_name}}</p>
       {% endif %}
     </div>
 
@@ -25,15 +25,18 @@
       {% endif %}
 
       <ul class="nav navbar-nav navbar-right">
-        {% if(user and user.id) %}
-          <li><a href="{{url_for('.get_user', user_id=user.id)}}">Profile</a></li>
-          {% if(user and user.id and is_admin) %}
+        {% if(logged_in_user and logged_in_user.id) %}
+          <li><a href="{{url_for('.get_user', user_id=logged_in_user.id)}}">Profile</a></li>
+          {% if(logged_in_user and logged_in_user.id and is_admin) %}
           <li><a href="{{url_for('.get_users')}}">Users</a></li>
           {% endif %}
         {% else %}
           <li><a href="{{url_for('.index')}}">Home</a></li>
         {% endif %}
         <li><a href="{{url_for('.about')}}">About</a></li>
+        {% if(logged_in_user and logged_in_user.id) %}
+        <li><a href="{{url_for('.logout')}}">Log out</a></li>
+        {% endif %}
       </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->

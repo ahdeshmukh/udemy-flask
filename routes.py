@@ -92,7 +92,10 @@ def logout():
 @login_required
 def get_user(user_id):
     user_service = UserService()
-    user = user_service.get_current_user()
+    if user_service.is_admin():
+        user = user_service.load_user(user_id)
+    else:
+        user = user_service.get_current_user()
     #user = current_user
     return render_template("profile.html", user=user)
 
@@ -148,9 +151,9 @@ def about():
 @app.context_processor
 def header_processor():
     user_service = UserService()
-    user = user_service.get_current_user()
+    logged_in_user = user_service.get_current_user()
     is_admin = user_service.is_admin()
-    return dict(user=user, is_admin=is_admin)
+    return dict(logged_in_user=logged_in_user, is_admin=is_admin)
 
 
 @app.route('/post-json', methods=['POST'])
