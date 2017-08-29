@@ -98,8 +98,16 @@ def get_user(user_id):
         if int(user.id) != int(user_id):
             flash('You do not have permission to access this data', 'danger')
             return redirect(url_for('.get_user', user_id=user.id))
-    #user = current_user
-    return render_template("profile.html", user=user)
+    his_her = 'His'
+    he_she = 'He'
+    spouse_name = 'Wife'
+    if user.gender == 'f':
+        his_her = 'Her'
+        he_she = 'She'
+        spouse_name = 'Husband'
+
+    gender_data = {"his_her": his_her, "he_she": he_she, "spouse_name": spouse_name}
+    return render_template("profile.html", user=user, gender_data=gender_data)
 
 
 @app.route('/users')

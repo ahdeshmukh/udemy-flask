@@ -46,7 +46,33 @@
 		</div>
 		<div class="col-md-9">
             <div class="profile-content" id="profile-user-description">
-			   Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum
+			   {% if not is_admin  %}
+				<div><p class="text-muted">The information given here is sample information</p></div>
+				<hr/>
+				<div>
+					<p>
+						{{user.first_name}} {{user.last_name}} works as an {{user.title}} with XYZ Corporation since 2015.
+						{{gender_data.he_she}} is intelligent and hard working. {{gender_data.his_her}} prospects of employment are extremely good.
+						{{gender_data.he_she}} is married and lives with {{gender_data.his_her.lower()}} {{gender_data.spouse_name.lower()}}.
+						{{gender_data.he_she}} is an animal lover and works as a volunteer at the county animal shelter.
+						{{gender_data.he_she}} loves to exercise, swim, travel and read.
+					</p>
+				</div>
+				<hr/>
+				<div>
+					<p><div>Nationality: American</div></p>
+					<p><div>Favorite place: America</div></p>
+					<p><div>Favorite city: New York</div></p>
+					<p><div>Favorite food: Italian</div></p>
+				</div>
+				{% else %}
+				<p>Welcome {{user.first_name}},</p>
+				<div>
+					You are the administrator for this site. You have access to the private data of the users.
+					You also have privileges to update the data of the users.
+					Use your privileges with extreme care and great responsibility.
+				</div>
+				{% endif %}
             </div>
 			<div class="profile-content" id="profile-user-my-account">
 				<form action="{{url_for('update_account')}}" method="POST" name="update-account-form">
