@@ -26,16 +26,16 @@
 
       <ul class="nav navbar-nav navbar-right">
         {% if(logged_in_user and logged_in_user.id) %}
-          <li><a href="{{url_for('.get_user', user_id=logged_in_user.id)}}">Profile</a></li>
+          <li {% if request.path.find("/user/") != -1 %} class="nav-li-active"{% endif %} ><a href="{{url_for('.get_user', user_id=logged_in_user.id)}}">Profile</a></li>
           {% if(logged_in_user and logged_in_user.id and is_admin) %}
-          <li><a href="{{url_for('.get_users')}}">Users</a></li>
+          <li {% if request.path=="/users" %} class="nav-li-active"{% endif %} ><a href="{{url_for('.get_users')}}">Users</a></li>
           {% endif %}
         {% else %}
-          <li><a href="{{url_for('.index')}}">Home</a></li>
+          <li {% if request.path=="/" %} class="nav-li-active"{% endif %} ><a href="{{url_for('.index')}}">Home</a></li>
         {% endif %}
-        <li><a href="{{url_for('.about')}}">About</a></li>
+        <li {% if request.path=="/about" %} class="nav-li-active"{% endif %} ><a href="{{url_for('.about')}}">About</a></li>
         {% if(logged_in_user and logged_in_user.id) %}
-        <li><a href="{{url_for('.logout')}}">Log out</a></li>
+        <li><a href="{{url_for('.logout')}}">Logout</a></li>
         {% endif %}
       </ul>
     </div><!-- /.navbar-collapse -->

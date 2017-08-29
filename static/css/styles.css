@@ -170,7 +170,13 @@ body {
   min-height: 460px;
 }
 
-ul.nav a:hover { color: orange !important; }
+/*ul.nav a:hover { color: orange !important; }*/
+.nav-li-active {
+ background-color: darkorange;
+}
+.nav-li-active>a {
+  color: #FFFFFF !important;
+}
 
 .flask-flash-message {
   padding: 10px;
