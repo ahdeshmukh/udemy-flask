@@ -1,6 +1,7 @@
 DROP TABLE IF EXISTS flask_user_role;
 DROP TABLE IF EXISTS flask_role;
 DROP TABLE IF EXISTS flask_user;
+DROP TABLE IF EXISTS flask_exception;
 
 CREATE TABLE flask_role(
 	id serial PRIMARY KEY,
@@ -30,6 +31,13 @@ CREATE TABLE flask_user_role
   	UNIQUE (user_id, role_id),
   	CONSTRAINT flask_user_role_role_id_fkey FOREIGN KEY (role_id) REFERENCES flask_role (id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION,
   	CONSTRAINT flask_user_role_user_id_fkey FOREIGN KEY (user_id) REFERENCES flask_user (id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION
+);
+
+CREATE TABLE flask_exception
+(
+    id serial PRIMARY KEY,
+    message TEXT,
+    error TEXT
 );
 
 INSERT INTO flask_role (name, description) VALUES ('authenticated', 'Default role for all registered users');

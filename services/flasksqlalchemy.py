@@ -10,6 +10,7 @@ class FlaskSQLAlchemy():
         self.flask_error = FlaskError()
 
     def add(self, obj):
+        print(obj)
         try:
             self.db.add(obj)
             if self.commit():

@@ -6,6 +6,7 @@ from sqlalchemy import text
 
 from app import app, db
 from models.user import User
+from models.exception import Exception
 from services.flasksqlalchemy import FlaskSQLAlchemy
 from services.flasklogging import FlaskLogging
 
@@ -110,6 +111,10 @@ class UserService:
                     "email": result[0].email, "gender": result[0].gender, "zipcode": result[0].zipcode,
                     "title": result[0].title, "image": image_url}
         except Exception as e:
+            exception = Exception()
+            exception.error = str(e)
+            exception.message = 'Error in database query'
+            self.flask_sql_alchemy.add(exception)
             self.flask_logging.log_info(str(e))
         return user
 
@@ -181,8 +186,8 @@ class UserService:
     def load_user_by_email(self, email):
         #TODO: get id from flask_user table based on email and then use load_user function
         user = None
-        result = User.query.filter(User.email == email).limit(1)
         try:
+            result = User.query.filter(User.email1 == email).limit(1)
             user = result[0]
             user.image = self.get_user_image(user)
             user.roles = [1]  # all users have authenticated role
@@ -190,8 +195,11 @@ class UserService:
             roles_result = db.engine.execute(roles_query, user_id=user.id)
             for role in roles_result:
                 user.roles.extend(role)
-        except:
-            pass
+        except Exception as e:
+            # exception = Exception()
+            # exception.error = str(e)
+            # exception.message = 'Error in database query'
+            # self.flask_sql_alchemy.add(exception)
         return user
 
     def login_user(self, user, remember=True):
