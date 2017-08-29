@@ -96,6 +96,9 @@ def get_user(user_id):
         user = user_service.load_user(user_id)
     else:
         user = user_service.get_current_user()
+        if int(user.id) != int(user_id):
+            flash('You do not have permission to access this data', 'danger')
+            return redirect(url_for('.get_user', user_id=user.id))
     #user = current_user
     return render_template("profile.html", user=user)
 
