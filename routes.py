@@ -58,7 +58,7 @@ def register():
     return render_template('register.html', registration_errors=registration_errors)
 
 
-@app.route('/login', methods=['POST'])
+@app.route('/login', methods=['POST', 'GET'])
 def login():
     if request.method == 'POST':
         email = request.form['email']
@@ -71,8 +71,8 @@ def login():
             user_service = UserService()
             user_service.login_user(user)
             return redirect(url_for('.get_user', user_id=user.id))
-
-    return render_template("login.html", invalid_credentials=True)
+        return render_template("login.html", invalid_credentials=True)
+    return render_template("login.html")
 
 
 @app.route('/logout')
@@ -109,6 +109,7 @@ def get_users():
     users = user_service.get_users()
     #user = user_service.get_current_user()
     return render_template("users.html", users=users)
+
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -156,6 +157,12 @@ def header_processor():
     logged_in_user = user_service.get_current_user()
     is_admin = user_service.is_admin()
     return dict(logged_in_user=logged_in_user, is_admin=is_admin)
+
+
+@login_manager.unauthorized_handler
+def unauthorized_user_redirect():
+    flash('You need to log in access the data', 'warning')
+    return redirect(url_for('.index'))
 
 
 @app.route('/post-json', methods=['POST'])
