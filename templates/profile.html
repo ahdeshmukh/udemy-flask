@@ -47,7 +47,7 @@
 		<div class="col-md-9">
             <div class="profile-content" id="profile-user-description">
 			   {% if not is_admin  %}
-				<div><p class="text-muted">The information given here is sample information</p></div>
+				<div><p class="text-muted">This is sample information used to display some data on the page</p></div>
 				<hr/>
 				<div>
 					<p>
@@ -66,12 +66,13 @@
 					<p><div>Favorite food: Italian</div></p>
 				</div>
 				{% else %}
-				<p>Welcome {{user.first_name}},</p>
-				<div>
+				<p>Welcome {{logged_in_user.first_name}},</p>
+				<p>
 					You are the administrator for this site. You have access to the private data of the users.
 					You also have privileges to update the data of the users.
 					Use your privileges with extreme care and great responsibility.
-				</div>
+				</p>
+				<p>You are currently looking at the profile of {{user.first_name}} {{user.last_name}}</p>
 				{% endif %}
             </div>
 			<div class="profile-content" id="profile-user-my-account">
