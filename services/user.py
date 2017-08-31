@@ -1,3 +1,4 @@
+import sys, os
 import recaptcha2
 from passlib.apps import custom_app_context as pwd_context #https://bitbucket.org/ecollins/passlib/wiki/Home
 from validate_email import validate_email #https://pypi.python.org/pypi/validate_email
@@ -6,7 +7,7 @@ from sqlalchemy import text
 
 from app import app, db
 from models.user import User
-from models.exception import Exception
+from models.exception import FlaskException
 from services.flasksqlalchemy import FlaskSQLAlchemy
 from services.flasklogging import FlaskLogging
 
@@ -111,10 +112,10 @@ class UserService:
                     "email": result[0].email, "gender": result[0].gender, "zipcode": result[0].zipcode,
                     "title": result[0].title, "image": image_url}
         except Exception as e:
-            exception = Exception()
-            exception.error = str(e)
-            exception.message = 'Error in database query'
-            self.flask_sql_alchemy.add(exception)
+            # exception = Exception()
+            # exception.error = str(e)
+            # exception.message = 'Error in database query'
+            # self.flask_sql_alchemy.add(exception)
             self.flask_logging.log_info(str(e))
         return user
 
@@ -146,9 +147,9 @@ class UserService:
         user.title = user_data['title']
         if not self.is_admin():
             user.gender = user_data['gender']
-            user.gender = user_data['gender']
 
         # TODO: FlaskSQLAlchemy as a strategy pattern
+        #self.flask_sql_alchemy.add(user)
         return self.flask_sql_alchemy.commit()
 
     def load_user(self, user_id):
@@ -187,7 +188,8 @@ class UserService:
         #TODO: get id from flask_user table based on email and then use load_user function
         user = None
         try:
-            result = User.query.filter(User.email1 == email).limit(1)
+            #result = User.query.filter(User.email1 == email).limit(1)
+            result = self.flask_sql_alchemy.filter(User, 'email', email, 1)
             user = result[0]
             user.image = self.get_user_image(user)
             user.roles = [1]  # all users have authenticated role
@@ -196,10 +198,14 @@ class UserService:
             for role in roles_result:
                 user.roles.extend(role)
         except Exception as e:
-            # exception = Exception()
+            # exc_type, exc_obj, exc_tb = sys.exc_info()
+            # fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+            # print(fname, exc_tb.tb_lineno)
+            # exception = FlaskException()
             # exception.error = str(e)
             # exception.message = 'Error in database query'
             # self.flask_sql_alchemy.add(exception)
+            pass
         return user
 
     def login_user(self, user, remember=True):

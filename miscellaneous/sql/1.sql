@@ -37,7 +37,8 @@ CREATE TABLE flask_exception
 (
     id serial PRIMARY KEY,
     message TEXT,
-    error TEXT
+    error TEXT,
+    created_time TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
 INSERT INTO flask_role (name, description) VALUES ('authenticated', 'Default role for all registered users');

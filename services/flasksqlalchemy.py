@@ -1,5 +1,7 @@
+import sys, os
 from app import db
 from services.flaskerror import FlaskError
+from models.exception import FlaskException
 
 
 class FlaskSQLAlchemy():
@@ -10,7 +12,6 @@ class FlaskSQLAlchemy():
         self.flask_error = FlaskError()
 
     def add(self, obj):
-        print(obj)
         try:
             self.db.add(obj)
             if self.commit():
@@ -32,11 +33,18 @@ class FlaskSQLAlchemy():
         except Exception as e:
             return self.error_message(e)
 
-    def filter(self, model, model_val, actual_val, operation='eq'):
+    def filter(self, model, model_val, actual_val, limit=None, operation='eq'):
         try:
-            return self.db.query(model).filter(model_val == actual_val)
+            return self.db.query(model).filter(getattr(model, model_val) == actual_val)
         except Exception as e:
-            return self.error_message(e)
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+            print(fname, exc_tb.tb_lineno)
+            exception = FlaskException()
+            exception.error = str(e)
+            exception.message = 'Error in database query'
+            self.flask_sql_alchemy.add(exception)
+            return self.error_message(e, True)
 
     def count(self, model, filter_values=None):
         try:
