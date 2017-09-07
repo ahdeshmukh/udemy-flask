@@ -4,7 +4,7 @@ from services.flaskerror import FlaskError
 from models.exception import FlaskException
 
 
-class FlaskSQLAlchemy():
+class FlaskSQLAlchemy:
 
     def __init__(self):
         self.db = db.session

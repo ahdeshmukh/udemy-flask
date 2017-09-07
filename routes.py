@@ -27,9 +27,10 @@ def register():
     user_service = UserService()
     current_user = user_service.get_current_user()
     try:
-        if current_user:
-            return redirect(url_for('.get_user', user_id=current_user.id))
+        #if current_user is not present, current_user.id will be None. Avoiding if statement, trying duck typing
+        return redirect(url_for('.get_user', user_id=current_user.id))
     except:
+        # no need to log exception as this is normal expected workflow
         pass
 
     registration_errors = None

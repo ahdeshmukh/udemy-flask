@@ -7,7 +7,6 @@ from sqlalchemy import text
 
 from app import app, db
 from models.user import User
-from models.exception import FlaskException
 from services.flasksqlalchemy import FlaskSQLAlchemy
 from services.flasklogging import FlaskLogging
 
@@ -153,12 +152,13 @@ class UserService:
         return self.flask_sql_alchemy.commit()
 
     def load_user(self, user_id):
+        #return FlaskExceptionService('Message', 'Error')
         user = User.query.get(user_id)
         if not user:
             return None
 
         user.image = self.get_user_image(user)
-        user.roles = [1] # all users have authenticated role
+        user.roles = [1]  # all users have authenticated role
         roles_query = text('SELECT role_id FROM flask_user_role WHERE user_id = :user_id')
         roles_result = db.engine.execute(roles_query, user_id=user_id)
         for role in roles_result:
@@ -166,6 +166,7 @@ class UserService:
         return user
 
     def get_current_user(self):
+        # current_user comes from flask_login
         return current_user
 
     def get_user_image(self, user):
@@ -201,7 +202,7 @@ class UserService:
             # exc_type, exc_obj, exc_tb = sys.exc_info()
             # fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
             # print(fname, exc_tb.tb_lineno)
-            # exception = FlaskException()
+            # exception = FlaskExceptionService()
             # exception.error = str(e)
             # exception.message = 'Error in database query'
             # self.flask_sql_alchemy.add(exception)
